@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: git-nfs
+spec:
+  storageClassName: nfs
+  capacity:
+    storage: 10G
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: kube05
+    path: "/home/rvk/nfs/git"
+  mountOptions:
+    - nfsvers=4.2
