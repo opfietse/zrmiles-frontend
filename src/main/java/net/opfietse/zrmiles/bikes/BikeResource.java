@@ -7,12 +7,16 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import net.opfietse.zrmiles.model.Motorcycle;
+import net.opfietse.zrmiles.rest.client.BikeClient;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Path("bikes")
 public class BikeResource {
+    @RestClient
+    private BikeClient bikeClient;
+
     @CheckedTemplate
     static class Templates {
 
@@ -22,9 +26,7 @@ public class BikeResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance get() {
-        List<Motorcycle> riders = List.of(
-            new Motorcycle(1, 1, "Kawasaki", "ZR-7", 1999, Short.valueOf("0"))
-        );
-        return BikeResource.Templates.bikes(riders);
+        List<Motorcycle> bikes = bikeClient.get();
+        return Templates.bikes(bikes);
     }
 }
