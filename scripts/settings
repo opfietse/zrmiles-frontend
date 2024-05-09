@@ -1,0 +1,12 @@
+NUMBER_OF_COMMITS=$(git log --format=oneline|wc -l|sed 's/^ *//')
+LAST_HASH=$(git log --format=oneline|head -1|sed 's/^\(.......\).*/\1/')
+IMAGE_BASE_NAME=net.opfietse/
+IMAGE_APPLICATION_NAME=$(grep artifactId pom.xml|head -1|sed 's/.*<artifactId>\([^<]*\).*/\1/')
+#IMAGE_APPLICATION_NAME=$(grep baseName build.gradle|head -1|sed "s/.*baseName = .\([^']*\).*/\1/"|sed 's/^[ 	]*//')
+IMAGE=${IMAGE_BASE_NAME}${IMAGE_APPLICATION_NAME}:${NUMBER_OF_COMMITS}-${LAST_HASH}
+
+if [ "$1" = -e ]
+then
+  echo IMAGE_APPLICATION_NAME: "x${IMAGE_APPLICATION_NAME}x"
+  echo $IMAGE
+fi

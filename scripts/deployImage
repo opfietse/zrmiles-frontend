@@ -1,0 +1,11 @@
+. $(dirname $0)/settings
+
+#tag = "monster:5000/opfietse.net/${applicationName}"
+#baseName = 'locationupdate'
+
+#echo X${NUMBER_OF_COMMITS} X${LAST_HASH} X${IMAGE_BASE_NAME} X${IMAGE_APPLICATION_NAME}
+
+set -x
+ssh kafkapi3 "cd docker/notifications; /home/rvk/bin/setImageName $IMAGE_BASE_NAME$IMAGE_APPLICATION_NAME:$NUMBER_OF_COMMITS-$LAST_HASH"
+ssh kafkapi3 'docker pull $(cat docker/notifications/image-ro-run)'
+ssh kafkapi3 docker/notifications/runNotifications

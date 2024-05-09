@@ -1,0 +1,9 @@
+. $(dirname $0)/settings
+
+#tag = "monster:5000/opfietse.net/${applicationName}"
+#baseName = 'locationupdate'
+
+#echo X${NUMBER_OF_COMMITS} X${LAST_HASH} X${IMAGE_BASE_NAME} X${IMAGE_APPLICATION_NAME}
+
+set -x
+docker push $IMAGE_BASE_NAME$IMAGE_APPLICATION_NAME:$NUMBER_OF_COMMITS-$LAST_HASH

@@ -50,7 +50,7 @@ spec:
           {{- end }}
           args:
             - "--dockerfile=src/main/docker/Dockerfile.jvm-rpi"
-            - "--context=dir:///src/zrmiles-backend"
+            - "--context=dir:///src/zrmiles-frontend"
             - "--destination={{ .Values.app.image_name}}:{{ .Values.app.image_tag}}"
             - "--insecure"
           {{- with .Values.env }}
