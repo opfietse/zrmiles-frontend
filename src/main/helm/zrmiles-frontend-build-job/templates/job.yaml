@@ -1,13 +1,13 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "zrmiles-frontend-zrmiles-frontend-build-job.fullname" . }}
+  name: {{ include "zrmiles-frontend-build-job.fullname" . }}
   labels:
-    {{- include "zrmiles-frontend-zrmiles-frontend-build-job.labels" . | nindent 4 }}
+    {{- include "zrmiles-frontend-build-job.labels" . | nindent 4 }}
 spec:
 {{/*  selector:*/}}
 {{/*    matchLabels:*/}}
-{{/*      {{- include "zrmiles-frontend-zrmiles-frontend-build-job.selectorLabels" . | nindent 6 }}*/}}
+{{/*      {{- include "zrmiles-frontend-build-job.selectorLabels" . | nindent 6 }}*/}}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -15,7 +15,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "zrmiles-frontend-zrmiles-frontend-build-job.labels" . | nindent 8 }}
+        {{- include "zrmiles-frontend-build-job.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -24,7 +24,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "zrmiles-frontend-zrmiles-frontend-build-job.serviceAccountName" . }}
+      serviceAccountName: {{ include "zrmiles-frontend-build-job.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       restartPolicy: Never
