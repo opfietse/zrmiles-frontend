@@ -1,10 +1,38 @@
 {#include base}
     {#title}ZRMiles riders{/title}
     <div>
-        <ul>
+        <p>
+            <br />
+            <br />
+            All riders in the database.<br>
+        </p>
+        <table border="1" summary="Lists the riders currently in the database">
+            <caption><em>Riders</em></caption>
+            <tr>
+                <th>Id
+                <th>First name
+                <th>Last name
+                <th>Location
+            </tr>
             {#each riders}
-                <li>{it.firstName} {it.lastName}</li>
+                <tr>
+                    <td>
+                        <a href="riders?riderId={it.id}">{it.id}</a>
+                    </td>
+                    <td>
+                        {it.firstName}
+                    </td>
+                    <td>
+                        <a href="riders/update?riderId={it.id}">{it.lastName}</a>
+                    </td>
+                    <td>
+                        {it.streetAddress}
+                    </td>
+                </tr>
             {/each}
-        </ul>
+        </table>
+        <br>
+        Click on the <B>Id</B> to show/add the bikes for that rider.<br>
+        Click on the <B>last name</B> to CHANGE or DELETE that rider.
     </div>
 {/include}

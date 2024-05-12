@@ -1,46 +1,46 @@
-BODY {
+body {
   background-color: lightgrey;
   color: black;
   font-family: monospace;
 }
 
-TABLE {
+table {
   /* border: ridge 2pt; */
   /* border-collapse: separate; */
   /* border-spacing: 1pt; */
 }
 
-TD {
+td {
   /* border: ridge 2pt; */
   padding: 0.3em;
   /* border: inset 1pt; */
 }
 
-TH {
+th {
   padding: 0.3em;
   /* border: inset 1pt; */
 }
 
-TD.lastname {
+td.lastname {
   color: black;
   font-size: +1;
   text-align: center;
 }
 
-TD.notComplete {
+td.notComplete {
   color: grey;
   text-align: right;
 }
 
-TD.right {
+td.right {
   text-align: right;
 }
 
-TD.center {
+td.center {
   text-align: center;
 }
 
-A {
+a {
   color: blue;
   font-family: helvetica, sans-serif;
   font-weight: bold;
