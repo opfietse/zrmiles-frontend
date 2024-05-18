@@ -19,7 +19,16 @@ public class Application extends Controller {
     }
 
     @Path("/")
-    public TemplateInstance index() {
+    public TemplateInstance indexSlash() {
+        return getHome();
+    }
+
+    @Path("/home")
+    public TemplateInstance indexHome() {
+        return getHome();
+    }
+
+    private TemplateInstance getHome() {
         return Templates.index(version.orElse("Beta"));
     }
 

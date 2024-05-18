@@ -3,40 +3,81 @@ package net.opfietse.zrmiles.riders;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import net.opfietse.zrmiles.model.Rider;
 import net.opfietse.zrmiles.rest.client.RiderClient;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.jboss.resteasy.reactive.RestForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Path("riders")
 public class RiderResource {
+    private static final Logger log = LoggerFactory.getLogger(RiderResource.class);
     @RestClient
     private RiderClient riderClient;
 
     @CheckedTemplate
     static class Templates {
 
-        static native TemplateInstance riders(List<Rider> riders);
+        static native TemplateInstance allRiders(List<Rider> riders);
+
+        static native TemplateInstance updateRider(Rider rider);
     }
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance get() {
-        List<Rider> riders = riderClient.get();
+    public TemplateInstance getAllRiders() {
+        List<Rider> riders = riderClient.getAllRiders();
+        return RiderResource.Templates.allRiders(riders);
+    }
 
-//        List<Item> items = new ArrayList<>();
-//        items.add(new Item(new BigDecimal(10), "Apple"));
-//        items.add(new Item(new BigDecimal(16), "Pear"));
-//        items.add(new Item(new BigDecimal(30), "Orange"));
-//        List<Rider> riders = new ArrayList<>();
-//        riders.add(new Rider(1, "Mark", "R", "NL"));
-//        riders.add(new Rider(2, "Tom", "W", "USA"));
-//        riders.add(new Rider(3, "Thom", "B", "USA"));
-        return RiderResource.Templates.riders(riders);
+    @Path("/update/{id}")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public TemplateInstance getUpdateRiderForm(@PathParam("id") Integer id) {
+        Rider rider = riderClient.getRider(id);
+        return RiderResource.Templates.updateRider(rider);
+    }
+
+    @Path("/update/{id}")
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    public void updateRider(
+        @PathParam("id") Integer id,
+        @RestForm Integer riderId,
+        @RestForm String firstName,
+        @RestForm String lastName,
+        @RestForm String streetAddress,
+        @RestForm String updateRider,
+        @RestForm String deleteRider
+    ) {
+        if ("Update".equals(updateRider)) {
+            if (id.equals(riderId)) {
+                log.info("Updating rider {}", riderId);
+
+                riderClient.getRider(riderId);
+                Rider newRider = new Rider(riderId, firstName, lastName, streetAddress);
+                riderClient.updateRider(riderId, newRider);
+
+                getUpdateRiderForm(id);
+//                return RiderResource.Templates.updateRider(newRider);
+            }
+        } else if ("Delete".equals(deleteRider)) {
+            if (id.equals(riderId)) {
+                log.info("Deleting rider {}", riderId);
+                riderClient.deleteRider(riderId);
+            } else {
+                log.warn("Id {} and rider.id {} do not match!", id, riderId);
+            }
+        }
+
+        getAllRiders();
     }
 }

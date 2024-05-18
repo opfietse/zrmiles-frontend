@@ -34,7 +34,7 @@ public class BikeResource {
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance get() {
         List<Motorcycle> bikes = bikeClient.get();
-        List<Rider> riders = riderClient.get();
+        List<Rider> riders = riderClient.getAllRiders();
         Map<Integer, String> riderById = riders
             .stream()
             .collect(Collectors.toMap(r -> r.id(), r -> r.firstName() + " " + r.lastName()));
