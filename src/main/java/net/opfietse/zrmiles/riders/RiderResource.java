@@ -1,5 +1,6 @@
 package net.opfietse.zrmiles.riders;
 
+import io.quarkiverse.renarde.util.StringUtils;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import jakarta.ws.rs.GET;
@@ -29,6 +30,8 @@ public class RiderResource {
         static native TemplateInstance allRiders(List<Rider> riders);
 
         static native TemplateInstance updateRider(Rider rider);
+
+        static native TemplateInstance registerRider(Rider rider, boolean registerOk);
     }
 
     @GET
@@ -79,5 +82,37 @@ public class RiderResource {
         }
 
         getAllRiders();
+    }
+
+    @Path("/register")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public TemplateInstance getRegisterRiderForm() {
+        return RiderResource.Templates.registerRider(null, false);
+    }
+
+    @Path("/register")
+    @POST
+    public TemplateInstance registerRider(
+        @RestForm String firstName,
+        @RestForm String lastName,
+        @RestForm String streetAddress,
+        @RestForm String addRider
+    ) {
+        if ("Add".equals(addRider)) {
+            if (StringUtils.isEmpty(firstName) || StringUtils.isEmpty(lastName)) {
+                return RiderResource.Templates.registerRider(
+                    new Rider(null, firstName, lastName, streetAddress),
+                    false
+                );
+            }
+
+            Rider newRider = new Rider(null, firstName, lastName, streetAddress);
+            Rider registeredRider = riderClient.addRider(newRider);
+
+            return RiderResource.Templates.registerRider(registeredRider, true);
+        }
+
+        return RiderResource.Templates.registerRider(null, false);
     }
 }

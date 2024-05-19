@@ -21,6 +21,10 @@ public interface RiderClient {
     @GET
     Rider getRider(@PathParam("riderId") Integer riderId);
 
+//    @Path("/{riderId}")
+    @POST
+    Rider addRider(Rider rider);
+
     @Path("/{riderId}")
     @PUT
     Rider updateRider(@PathParam("riderId") Integer riderId, Rider rider);
