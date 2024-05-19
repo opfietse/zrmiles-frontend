@@ -88,7 +88,7 @@ public class RiderResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance getRegisterRiderForm() {
-        return RiderResource.Templates.registerRider(null, false);
+        return RiderResource.Templates.registerRider(null, true);
     }
 
     @Path("/register")

@@ -22,7 +22,7 @@
                         First name *
                     </td>
                     <td>
-                        <input type="text" size="20" maxlength="20" name="firstName" value="{rider.firstName}">
+                        <input type="text" size="20" maxlength="20" name="firstName" value="{rider.firstName.or('')}">
                     </td>
                 </tr>
                 <tr>
@@ -30,7 +30,7 @@
                         Last name *
                     </td>
                     <td>
-                        <input type="text" size="40" maxlength="40" name="lastName" value="{rider.lastName}">
+                        <input type="text" size="40" maxlength="40" name="lastName" value="{rider.lastName.or('')}">
                     </td>
                 </tr>
                 <tr>
@@ -38,7 +38,7 @@
                         Location
                     </td>
                     <td>
-                        <input type="text" size="50" maxlength="50" name="streetAddress" value="{rider.streetAddress}">
+                        <input type="text" size="50" maxlength="50" name="streetAddress" value="{rider.streetAddress.or('')}">
                     </td>
                 </tr>
                 <tr>
