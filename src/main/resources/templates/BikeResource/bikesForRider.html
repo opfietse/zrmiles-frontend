@@ -1,0 +1,87 @@
+{#include baseSubTwo}
+    {#title}ZR_Riders - Mileage database - bikes listing{/title}
+    <div>
+        <br><br>
+        <p>
+        {#if ! registerOk}
+            <span class="errorText">
+        {/if}
+                {pageHeader}
+                {#if ! registerOk}
+            </span>
+            {/if}
+        </p>
+        <form name="addBikeForm" method="POST">
+            <input type="hidden" name="{inject:csrf.parameterName}" value="{inject:csrf.token}"/>
+            <table border="0">
+                <caption><em>Bike</em></caption>
+                <tr>
+                    <td>
+                        Make *
+                    </td>
+                    <td>
+                        <input type="text" size="40" maxlength="40" name="make"
+                               value="{newBike.make.or('')}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Model *
+                    </td>
+                    <td>
+                        <input type="text" size="50" maxlength="50" name="model"
+                               value="{newBike.model.or('')}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Year
+                    </td>
+                    <td>
+                        <input type="text" size="4" maxlength="4" name="year"
+                               value="{newBike.year.or('')}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Odometer in
+                    </td>
+                    <td>
+                        <select name="distanceUnit">
+                            <option {#if kilometers}selected{/if} value="1">Kilometers</option>
+                            <option {#if !kilometers}selected{/if} value="0">Miles</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><input type="submit" name="addMotorcycle" value="Add">
+                </tr>
+            </table>
+        </form>
+        * = Required.<br><br>
+        <table border="1" summary="Lists the bikes for one rider">
+            <caption><em>Bikes</em></caption>
+            <tr>
+                <th>Id
+                <th>Make
+                <th>Model
+                <th>Year
+                <th>Odometer in
+                <th>Current mileage
+            </tr>
+            {#each bikes}
+                <tr>
+                    <td><a href="../miles/showandadd.jsp?motorcycleId={it.id}">&nbsp;{it.id}&nbsp;</a></td>
+                    <td>{it.make}</td>
+                    <td><a href="update.jsp?motorcycleId=<%=motorcycle.getId()%>">{it.model}</a></td>
+                    <td>{it.year}</td>
+                    <td>{#if it.distanceUnit.toString == "0"}Miles{#else}Kilometers{/if}</td>
+                    <td>TODO: miles</td>
+                </tr>
+            {/each}
+        </table>
+        <p>
+            Click on the <b>Id</b> to show/add the mileage for that bike.<br>
+            Click on the <b>Model</b> field to CHANGE or DELETE the entry
+    </div>
+{/include}

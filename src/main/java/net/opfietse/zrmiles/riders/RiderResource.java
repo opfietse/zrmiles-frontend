@@ -21,6 +21,7 @@ import java.util.List;
 @Path("riders")
 public class RiderResource {
     private static final Logger log = LoggerFactory.getLogger(RiderResource.class);
+
     @RestClient
     private RiderClient riderClient;
 

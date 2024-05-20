@@ -1,0 +1,55 @@
+{#include baseSubTwo}
+    {#title}ZRMiles update rider{/title}
+    <div>
+        <p>
+            <br/>
+            <br/>
+            Update rider.<br>
+        </p>
+
+        <form name="updateRiderForm" method="POST">
+            <input type="hidden" name="riderId" value="{rider.id}">
+            <input type="hidden" name="{inject:csrf.parameterName}" value="{inject:csrf.token}" />
+            <table border="0">
+                <caption><em>Rider</em></caption>
+                <tr>
+                    <td>
+                        First name *
+                    </td>
+                    <td>
+                        <input type="text" size="20" maxlength="20" name="firstName"
+                               value="{rider.firstName}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Last name *
+                    </td>
+                    <td>
+                        <input type="text" size="40" maxlength="40" name="lastName"
+                               value="{rider.lastName}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Location
+                    </td>
+                    <td>
+                        <input type="text" size="50" maxlength="50" name="streetAddress"
+                               value="{rider.streetAddress}">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><INPUT type="submit" name="updateRider" value="Update">
+                </tr>
+                <tr>
+                    <td colspan="2">&nbsp;</td>
+                </tr>
+                <tr>
+                    <TD colspan="2" align="center"><INPUT type="submit" name="deleteRider" value="Delete"></TD>
+                </tr>
+            </table>
+        </form>
+        * = Required.<BR><BR>
+    </div>
+{/include}
