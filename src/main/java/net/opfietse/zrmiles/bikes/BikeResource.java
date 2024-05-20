@@ -48,12 +48,20 @@ public class BikeResource {
             String pageHeader,
             boolean registerOk,
             boolean kilometers);
+
+        static native TemplateInstance updateBike(
+            Motorcycle bike,
+            String pageHeader,
+            boolean kilometers,
+            boolean updateOk);
     }
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance get() {
-        List<Motorcycle> bikes = bikeClient.get();
+    public TemplateInstance getAllBikes() {
+        log.info("getAllBikes called");
+
+        List<Motorcycle> bikes = bikeClient.getAllBikes();
         List<Rider> riders = riderClient.getAllRiders();
         Map<Integer, String> riderById = riders
             .stream()
@@ -76,7 +84,9 @@ public class BikeResource {
     @Path("/rider/{riderId}")
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance getForRider(@PathParam("riderId") Integer riderId) {
+    public TemplateInstance getBikesForRider(@PathParam("riderId") Integer riderId) {
+        log.info("Get bikes for rider {}", riderId);
+
         List<Motorcycle> bikes = riderBikeClient.getForRider(riderId);
         Rider rider = riderClient.getRider(riderId);
         return Templates.bikesForRider(null,
@@ -87,57 +97,71 @@ public class BikeResource {
         );
     }
 
-    //
-//    @Path("/update/{id}")
-//    @GET
-//    @Produces(MediaType.TEXT_HTML)
-//    public TemplateInstance getUpdateRiderForm(@PathParam("id") Integer id) {
-//        Rider rider = riderClient.getRider(id);
-//        return RiderResource.Templates.updateRider(rider);
-//    }
-//
-//    @Path("/update/{id}")
-//    @POST
-//    @Produces(MediaType.TEXT_HTML)
-//    public void updateRider(
-//        @PathParam("id") Integer id,
-//        @RestForm Integer riderId,
-//        @RestForm String firstName,
-//        @RestForm String lastName,
-//        @RestForm String streetAddress,
-//        @RestForm String updateRider,
-//        @RestForm String deleteRider
-//    ) {
-//        if ("Update".equals(updateRider)) {
-//            if (id.equals(riderId)) {
-//                log.info("Updating rider {}", riderId);
-//
-//                riderClient.getRider(riderId);
-//                Rider newRider = new Rider(riderId, firstName, lastName, streetAddress);
-//                riderClient.updateRider(riderId, newRider);
-//
-//                getUpdateRiderForm(id);
-////                return RiderResource.Templates.updateRider(newRider);
-//            }
-//        } else if ("Delete".equals(deleteRider)) {
-//            if (id.equals(riderId)) {
-//                log.info("Deleting rider {}", riderId);
-//                riderClient.deleteRider(riderId);
-//            } else {
-//                log.warn("Id {} and rider.id {} do not match!", id, riderId);
-//            }
-//        }
-//
-//        getAllRiders();
-//    }
-//
-//    @Path("/register")
-//    @GET
-//    @Produces(MediaType.TEXT_HTML)
-//    public TemplateInstance getRegisterRiderForm() {
-//        return RiderResource.Templates.registerRider(null, true);
-//    }
-//
+    @Path("/update/{id}")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public TemplateInstance getUpdateBikeForm(@PathParam("id") Integer id) {
+        log.info("Get update form for bike {}", id);
+
+        Motorcycle bike = bikeClient.getBike(id);
+        return BikeResource.Templates.updateBike(
+            bike,
+            "",
+            bike.distanceUnit().equals(Short.valueOf("1")),
+            true
+        );
+    }
+
+    @Path("/update/{id}")
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    public TemplateInstance updateBike(
+        @PathParam("id") Integer id,
+        @RestForm Integer bikeId,
+        @RestForm Integer riderId,
+        @RestForm String make,
+        @RestForm String model,
+        @RestForm String year,
+        @RestForm String distanceUnit,
+        @RestForm String updateMotorcycle,
+        @RestForm String deleteMotorcycle
+    ) {
+        log.info("Update/delete bike {}", id);
+
+        if ("Update".equals(updateMotorcycle)) {
+            if (id.equals(bikeId)) {
+                log.info("Updating bike {}", bikeId);
+
+                bikeClient.getBike(bikeId);
+                Motorcycle newMotorcycle = new Motorcycle(
+                    id,
+                    riderId,
+                    make,
+                    model,
+                    StringUtils.isEmpty(year) ? null : Integer.parseInt(year),
+                    Short.valueOf(distanceUnit)
+                );
+
+                bikeClient.updateBike(id, newMotorcycle);
+
+                return getBikesForRider(riderId);
+            } else {
+                log.warn("Update: Id {} and bike.id {} do not match!", id, bikeId);
+            }
+        } else if ("Delete".equals(deleteMotorcycle)) {
+            if (id.equals(bikeId)) {
+                log.info("Deleting bike {}", bikeId);
+                Motorcycle deletedBike = bikeClient.deleteBike(bikeId);
+                return getBikesForRider(deletedBike.riderId());
+            } else {
+                log.warn("Delete: Id {} and bike.id {} do not match!", id, bikeId);
+                return getUpdateBikeForm(id);
+            }
+        }
+
+        return getBikesForRider(riderId);
+    }
+
     @Path("/rider/{riderId}")
     @POST
     public TemplateInstance registerBike(

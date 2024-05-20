@@ -18,13 +18,12 @@
             {#each bikes}
                 <tr>
                     <td>
-                        <a href="../miles/showandadd.jsp?motorcycleId=<%= motorcycle.getId() %>">&nbsp;{it.id}&nbsp;</a>
+                        <a href="../miles/showandadd/{it.id}">&nbsp;{it.id}&nbsp;</a>
                     </td>
-                    <td><A href="../riders/update.jsp?riderId=<%= motorcycle.getRiderId() %>">
-                            {it.owner}</A>
+                    <td><a href="../riders/update/{it.riderId}">{it.owner}</a>
                     </td>
                     <td>{it.make}</td>
-                    <td><a href="update.jsp?motorcycleId=<%=motorcycle.getId()%>">{it.model}</a>
+                    <td><a href="../bikes/update/{it.id}">{it.model}</a>
                     </td>
                     <td>{it.year}</td>
                     <td>

@@ -1,55 +1,68 @@
 {#include baseSubTwo}
-    {#title}ZRMiles update rider{/title}
+    {#title}ZRMiles update bike{/title}
     <div>
         <p>
             <br/>
             <br/>
-            Update rider.<br>
+            {pageHeader}<br>
         </p>
 
-        <form name="updateRiderForm" method="POST">
-            <input type="hidden" name="riderId" value="{rider.id}">
-            <input type="hidden" name="{inject:csrf.parameterName}" value="{inject:csrf.token}" />
+        <form name="updateBikeForm" method="POST">
+            <input type="hidden" name="bikeId" value="{bike.id}">
+            <input type="hidden" name="riderId" value="{bike.riderId}">
+            <input type="hidden" name="{inject:csrf.parameterName}" value="{inject:csrf.token}"/>
             <table border="0">
-                <caption><em>Rider</em></caption>
+                <caption><em>Bike</em></caption>
                 <tr>
                     <td>
-                        First name *
+                        Make *
                     </td>
                     <td>
-                        <input type="text" size="20" maxlength="20" name="firstName"
-                               value="{rider.firstName}">
+                        <input type="text" size="40" maxlength="40" name="make"
+                               value="{bike.make.or('')}">
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        Last name *
+                        Model *
                     </td>
                     <td>
-                        <input type="text" size="40" maxlength="40" name="lastName"
-                               value="{rider.lastName}">
+                        <input type="text" size="50" maxlength="50" name="model"
+                               value="{bike.model.or('')}">
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        Location
+                        Year
                     </td>
                     <td>
-                        <input type="text" size="50" maxlength="50" name="streetAddress"
-                               value="{rider.streetAddress}">
+                        <input type="text" size="4" maxlength="4" name="year"
+                               value="{bike.year.or('')}">
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" align="center"><INPUT type="submit" name="updateRider" value="Update">
+                    <td>
+                        Odometer in
+                    </td>
+                    <td>
+                        <select name="distanceUnit">
+                            <option {#if kilometers}selected{/if} value="1">Kilometers</option>
+                            <option {#if ! kilometers}selected{/if} value="0">Miles</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><input type="submit" name="updateMotorcycle" value="Update">
+                </tr>
                 </tr>
                 <tr>
                     <td colspan="2">&nbsp;</td>
                 </tr>
                 <tr>
-                    <TD colspan="2" align="center"><INPUT type="submit" name="deleteRider" value="Delete"></TD>
+                    <TD colspan="2" align="center"><input type="submit" name="deleteMotorcycle" value="Delete"></TD>
                 </tr>
             </table>
         </form>
-        * = Required.<BR><BR>
+        * = Required.<br><br>
     </div>
 {/include}
