@@ -20,7 +20,7 @@ import java.util.List;
 
 @Path("riders")
 public class RiderResource {
-    private static final Logger log = LoggerFactory.getLogger(RiderResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(RiderResource.class);
 
     @RestClient
     private RiderClient riderClient;
@@ -64,7 +64,7 @@ public class RiderResource {
     ) {
         if ("Update".equals(updateRider)) {
             if (id.equals(riderId)) {
-                log.info("Updating rider {}", riderId);
+                logger.info("Updating rider {}", riderId);
 
                 riderClient.getRider(riderId);
                 Rider newRider = new Rider(riderId, firstName, lastName, streetAddress);
@@ -75,10 +75,10 @@ public class RiderResource {
             }
         } else if ("Delete".equals(deleteRider)) {
             if (id.equals(riderId)) {
-                log.info("Deleting rider {}", riderId);
+                logger.info("Deleting rider {}", riderId);
                 riderClient.deleteRider(riderId);
             } else {
-                log.warn("Id {} and rider.id {} do not match!", id, riderId);
+                logger.warn("Id {} and rider.id {} do not match!", id, riderId);
             }
         }
 

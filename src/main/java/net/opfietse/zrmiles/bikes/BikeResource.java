@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 @Path("bikes")
 public class BikeResource {
-    private static final Logger log = LoggerFactory.getLogger(BikeResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(BikeResource.class);
 
     @RestClient
     private BikeClient bikeClient;
@@ -59,7 +59,7 @@ public class BikeResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance getAllBikes() {
-        log.info("getAllBikes called");
+        logger.info("getAllBikes called");
 
         List<Motorcycle> bikes = bikeClient.getAllBikes();
         List<Rider> riders = riderClient.getAllRiders();
@@ -85,7 +85,7 @@ public class BikeResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance getBikesForRider(@PathParam("riderId") Integer riderId) {
-        log.info("Get bikes for rider {}", riderId);
+        logger.info("Get bikes for rider {}", riderId);
 
         List<Motorcycle> bikes = riderBikeClient.getForRider(riderId);
         Rider rider = riderClient.getRider(riderId);
@@ -101,7 +101,7 @@ public class BikeResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance getUpdateBikeForm(@PathParam("id") Integer id) {
-        log.info("Get update form for bike {}", id);
+        logger.info("Get update form for bike {}", id);
 
         Motorcycle bike = bikeClient.getBike(id);
         return BikeResource.Templates.updateBike(
@@ -126,11 +126,11 @@ public class BikeResource {
         @RestForm String updateMotorcycle,
         @RestForm String deleteMotorcycle
     ) {
-        log.info("Update/delete bike {}", id);
+        logger.info("Update/delete bike {}", id);
 
         if ("Update".equals(updateMotorcycle)) {
             if (id.equals(bikeId)) {
-                log.info("Updating bike {}", bikeId);
+                logger.info("Updating bike {}", bikeId);
 
                 bikeClient.getBike(bikeId);
                 Motorcycle newMotorcycle = new Motorcycle(
@@ -146,15 +146,15 @@ public class BikeResource {
 
                 return getBikesForRider(riderId);
             } else {
-                log.warn("Update: Id {} and bike.id {} do not match!", id, bikeId);
+                logger.warn("Update: Id {} and bike.id {} do not match!", id, bikeId);
             }
         } else if ("Delete".equals(deleteMotorcycle)) {
             if (id.equals(bikeId)) {
-                log.info("Deleting bike {}", bikeId);
+                logger.info("Deleting bike {}", bikeId);
                 Motorcycle deletedBike = bikeClient.deleteBike(bikeId);
                 return getBikesForRider(deletedBike.riderId());
             } else {
-                log.warn("Delete: Id {} and bike.id {} do not match!", id, bikeId);
+                logger.warn("Delete: Id {} and bike.id {} do not match!", id, bikeId);
                 return getUpdateBikeForm(id);
             }
         }
@@ -173,7 +173,7 @@ public class BikeResource {
         @RestForm String addMotorcycle
     ) {
         if ("Add".equals(addMotorcycle)) {
-            System.out.println("Distance unit: " + distanceUnit);
+            logger.info("Add bike for rider {}: {} {} {} {}", riderId, make, model, year, distanceUnit);
 
             if (StringUtils.isEmpty(make) || StringUtils.isEmpty(model) || StringUtils.isEmpty(distanceUnit)) {
                 List<Motorcycle> bikes = riderBikeClient.getForRider(riderId);
