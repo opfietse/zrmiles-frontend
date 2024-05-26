@@ -67,11 +67,15 @@ public class RiderResource {
                 logger.info("Updating rider {}", riderId);
 
                 riderClient.getRider(riderId);
-                Rider newRider = new Rider(riderId, firstName, lastName, streetAddress);
+                Rider newRider = new Rider(
+                    riderId,
+                    firstName.trim(),
+                    lastName.trim(),
+                    StringUtils.isEmpty(streetAddress.trim()) ? null : streetAddress.trim()
+                );
                 riderClient.updateRider(riderId, newRider);
 
                 getUpdateRiderForm(id);
-//                return RiderResource.Templates.updateRider(newRider);
             }
         } else if ("Delete".equals(deleteRider)) {
             if (id.equals(riderId)) {
