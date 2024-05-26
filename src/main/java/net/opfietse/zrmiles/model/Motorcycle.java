@@ -6,6 +6,7 @@ public record Motorcycle(
     String make,
     String model,
     Integer year,
-    Short distanceUnit
+    Short distanceUnit,
+    Integer totalMiles
 ) {
 }

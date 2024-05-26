@@ -7,6 +7,7 @@ public record MotorcycleWithRider(
     String model,
     Integer year,
     Short distanceUnit,
-    String owner
+    String owner,
+    Integer totalMiles
 ) {
 }

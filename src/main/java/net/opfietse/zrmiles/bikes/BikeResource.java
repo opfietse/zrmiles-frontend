@@ -76,7 +76,8 @@ public class BikeResource {
                     m.model(),
                     m.year(),
                     m.distanceUnit(),
-                    riderById.get(m.riderId())
+                    riderById.get(m.riderId()),
+                    m.totalMiles()
                 )).toList();
         return Templates.allBikes(motorcyclesWithRider, "All bikes in the database.");
     }
@@ -139,7 +140,8 @@ public class BikeResource {
                     make,
                     model,
                     StringUtils.isEmpty(year) ? null : Integer.parseInt(year),
-                    Short.valueOf(distanceUnit)
+                    Short.valueOf(distanceUnit),
+                    null
                 );
 
                 bikeClient.updateBike(id, newMotorcycle);
@@ -185,7 +187,9 @@ public class BikeResource {
                         make,
                         model,
                         StringUtils.isEmpty(year) ? null : Integer.parseInt(year),
-                        StringUtils.isEmpty(distanceUnit) ? null : Short.valueOf(distanceUnit)),
+                        StringUtils.isEmpty(distanceUnit) ? null : Short.valueOf(distanceUnit),
+                        null
+                    ),
                     bikes,
                     "Please fill out all required fields!"
                     , false,
@@ -199,7 +203,8 @@ public class BikeResource {
                 make,
                 model,
                 StringUtils.isEmpty(year) ? null : Integer.parseInt(year),
-                Short.valueOf(distanceUnit)
+                Short.valueOf(distanceUnit),
+                null
             );
 
             bikeClient.addBike(newMotorcycle);
