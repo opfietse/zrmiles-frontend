@@ -103,12 +103,22 @@ public class RiderResource {
         if ("Add".equals(addRider)) {
             if (StringUtils.isEmpty(firstName) || StringUtils.isEmpty(lastName)) {
                 return RiderResource.Templates.registerRider(
-                    new Rider(null, firstName, lastName, streetAddress),
+                    new Rider(
+                        null,
+                        firstName,
+                        lastName,
+                        StringUtils.isEmpty(streetAddress.trim()) ? null : streetAddress.trim()
+                    ),
                     false
                 );
             }
 
-            Rider newRider = new Rider(null, firstName, lastName, streetAddress);
+            Rider newRider = new Rider(
+                null,
+                firstName,
+                lastName,
+                StringUtils.isEmpty(streetAddress.trim()) ? null : streetAddress.trim()
+            );
             Rider registeredRider = riderClient.addRider(newRider);
 
             return RiderResource.Templates.registerRider(registeredRider, true);
