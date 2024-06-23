@@ -1,0 +1,37 @@
+{#include baseSubTwo}
+    {#title}ZR_Riders - Milage database - update miles{/title}
+    <div>
+        {!<br><br>!}
+        {!{pageHeader}!}
+        {!<br><br>!}
+
+        <br><br>Change mileage details for <%= owner %> <%= (motorcycle.getMake() + " " + motorcycle.getModel()) %>
+        <br><br>
+        <form name="milesForm" method="POST">
+            <input type="hidden" name="milesId" value="{milesId}">
+            <input type="hidden" name="{inject:csrf.parameterName}" value="{inject:csrf.token}"/>
+            <table border="0">
+                <tr>
+                    <td>Date ({dateFormat}) *</td>
+                    <td><input type="text" size="10" maxlength="10" name="date" value="{miles.milesDate}"></td>
+                </tr><tr>
+                    <td>Odometer reading *</td>
+                    <td><input type="text" size="6" maxlength="6" name="odometer" value="{miles.odometerReading}"></td>
+                </tr><tr>
+                    <td>Correction</td>
+                    <td><input type="text" size="6" maxlength="6" name="correction" value="{miles.correctionMiles}"></td>
+                </tr><tr>
+                    <td>Free comment</td>
+                    <td><input type="text" size="50" maxlength="50" name="userComment" value="{miles.userComment}"></td>
+                </tr><tr>
+                    <td colspan="2" align="center"><input type="submit" name="updateMiles" value="Update"></td>
+                </tr><tr><td colspan="2">&nbsp;</td>
+                </tr><tr>
+                    <td colspan="2" align="center"><input type="submit" name="deleteMiles" value="Delete"></td>
+                </tr>
+            </table>
+            * = Required.
+        </form>
+        <br>
+    </div>
+{/include}

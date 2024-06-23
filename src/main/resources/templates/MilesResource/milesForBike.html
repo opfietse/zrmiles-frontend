@@ -1,0 +1,61 @@
+{#include baseSubTwo}
+    {#title}ZR_Riders - Milage database - miles listing{/title}
+    <div>
+        <br><br>
+        {pageHeader}
+        <br><br>
+        <br>Please read the <a href="../home/help.jsp#count">help section</a> on how the miles are counted before entering the miles<BR>
+        <br>Back to {owner}'s <a href="../../../bikes/rider/{motorcycle.riderId}">bikes</a>
+        <br><br><br>Mileage details for {owner}'s {motorcycle.make} {motorcycle.model}
+        <br><br>
+        <form name="milesForm" method="POST">
+            <input type="hidden" name="{inject:csrf.parameterName}" value="{inject:csrf.token}"/>
+            <input type="hidden" name="motorcycleId" value="{motorcycle.id}">
+            <table border="0">
+                <tr>
+                    <td>Date (TODO: date format) *</td>
+
+                    <td><input type="text" size="10" maxlength="10" name="date" value="{currentDate}"></td>
+                </tr><tr>
+                    <td>Odometer reading *</td>
+                    <td><input type="text" size="6" maxlength="6" name="odometer"></td>
+                </tr><tr>
+                    <td>Correction</td>
+                    <td><input type="text" size="6" maxlength="6" name="correction"></td>
+                </tr><tr>
+                    <td>Free comment</td>
+                    <td><input type="text" size="50" maxlength="50" name="userComment" value="TODO: fill"></td>
+                </tr><tr>
+                    <td colspan="2" align="center"><input type="submit" name="addMiles" value="Add"></td>
+                </tr>
+            </table>
+            * = Required.
+        </form>
+        <table border="1" summary="Lists the mileage for this bike">
+            <caption><em>{distanceUnitText}</em></caption>
+            <tr>
+                <th>Date
+                <th>Odometer
+                <th>Correction
+                <th>Comment
+            </tr>
+            {#each miles}
+            <tr>
+                <td>
+                    {it.milesDate}
+                </td>
+                <td><a href="../update/{it.id}">
+                    {it.odometerReading}</a>
+                </td>
+                <td>
+                    {it.correctionMiles}
+                </td>
+                <td>
+                    {it.userComment}
+                </td>
+            </tr>
+            {/each}
+        </table>
+        <br>
+    </div>
+{/include}

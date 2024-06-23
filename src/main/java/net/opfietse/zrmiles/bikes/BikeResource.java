@@ -1,31 +1,34 @@
 package net.opfietse.zrmiles.bikes;
 
+import io.quarkiverse.renarde.Controller;
 import io.quarkiverse.renarde.util.StringUtils;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
-import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import net.opfietse.zrmiles.model.Miles;
 import net.opfietse.zrmiles.model.Motorcycle;
 import net.opfietse.zrmiles.model.MotorcycleWithRider;
 import net.opfietse.zrmiles.model.Rider;
 import net.opfietse.zrmiles.rest.client.BikeClient;
+import net.opfietse.zrmiles.rest.client.MilesClient;
 import net.opfietse.zrmiles.rest.client.RiderBikeClient;
 import net.opfietse.zrmiles.rest.client.RiderClient;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.resteasy.reactive.RestForm;
+import org.jboss.resteasy.reactive.RestPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Path("bikes")
-public class BikeResource {
+public class BikeResource extends Controller {
     private static final Logger logger = LoggerFactory.getLogger(BikeResource.class);
 
     @RestClient
@@ -34,6 +37,8 @@ public class BikeResource {
     private RiderClient riderClient;
     @RestClient
     private RiderBikeClient riderBikeClient;
+    @RestClient
+    private MilesClient milesClient;
 
     @CheckedTemplate
     static class Templates {
@@ -54,9 +59,18 @@ public class BikeResource {
             String pageHeader,
             boolean kilometers,
             boolean updateOk);
+
+        static native TemplateInstance milesForBike(
+            List<Miles> miles,
+            String pageHeader,
+            String owner,
+            Motorcycle motorcycle,
+            String distanceUnitText,
+            String currentDate
+        );
     }
 
-    @GET
+    @Path("")
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance getAllBikes() {
         logger.info("getAllBikes called");
@@ -82,10 +96,9 @@ public class BikeResource {
         return Templates.allBikes(motorcyclesWithRider, "All bikes in the database.");
     }
 
-    @Path("/rider/{riderId}")
-    @GET
+    @Path("/rider")
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance getBikesForRider(@PathParam("riderId") Integer riderId) {
+    public TemplateInstance getBikesForRider(@RestPath Integer riderId) {
         logger.info("Get bikes for rider {}", riderId);
 
         List<Motorcycle> bikes = riderBikeClient.getForRider(riderId);
@@ -98,10 +111,9 @@ public class BikeResource {
         );
     }
 
-    @Path("/update/{id}")
-    @GET
+    @Path("/update")
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance getUpdateBikeForm(@PathParam("id") Integer id) {
+    public TemplateInstance getUpdateBikeForm(@RestPath Integer id) {
         logger.info("Get update form for bike {}", id);
 
         Motorcycle bike = bikeClient.getBike(id);
@@ -113,11 +125,11 @@ public class BikeResource {
         );
     }
 
-    @Path("/update/{id}")
     @POST
+    @Path("/update")
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance updateBike(
-        @PathParam("id") Integer id,
+        @RestPath Integer id,
         @RestForm Integer bikeId,
         @RestForm Integer riderId,
         @RestForm String make,
@@ -164,10 +176,10 @@ public class BikeResource {
         return getBikesForRider(riderId);
     }
 
-    @Path("/rider/{riderId}")
     @POST
+    @Path("/rider")
     public TemplateInstance registerBike(
-        @PathParam("riderId") Integer riderId,
+        @RestPath Integer riderId,
         @RestForm String make,
         @RestForm String model,
         @RestForm String year,
@@ -219,5 +231,24 @@ public class BikeResource {
             String.format("Enter data for %s %s's bike below.", rider.firstName(), rider.lastName()),
             true,
             true);
+    }
+
+    @Path("/miles")
+    @Produces(MediaType.TEXT_HTML)
+    public TemplateInstance getMilesforBike(@RestPath Integer motorcycleId) {
+        logger.info("Get miles for motorcycle {}", motorcycleId);
+        Motorcycle motorcycle = bikeClient.getBike(motorcycleId);
+        Rider rider = riderClient.getRider(motorcycle.riderId());
+
+        List<Miles> allMilesForMotorcycle = milesClient.getAllMilesForMotorcycle(motorcycleId);
+
+        return Templates.milesForBike(
+            allMilesForMotorcycle,
+            "Moi",
+            rider.firstName() + " " + rider.lastName(),
+            motorcycle,
+            motorcycle.distanceUnit() == 0 ? "Miles" : "Kilometers",
+            LocalDate.now().toString()
+        );
     }
 }

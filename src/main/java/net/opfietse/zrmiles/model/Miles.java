@@ -9,6 +9,10 @@ public record Miles(
     Integer odometerReading,
     Integer correctionMiles,
     String userComment
-) {
+) implements Comparable<Miles> {
 
+    @Override
+    public int compareTo(Miles o) {
+        return odometerReading.compareTo(o.odometerReading);
+    }
 }

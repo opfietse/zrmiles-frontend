@@ -1,25 +1,25 @@
 package net.opfietse.zrmiles.riders;
 
+import io.quarkiverse.renarde.Controller;
 import io.quarkiverse.renarde.util.StringUtils;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
-import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import net.opfietse.zrmiles.model.Rider;
 import net.opfietse.zrmiles.rest.client.RiderClient;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.resteasy.reactive.RestForm;
+import org.jboss.resteasy.reactive.RestPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-@Path("riders")
-public class RiderResource {
+//@Path("riders")
+public class RiderResource extends Controller {
     private static final Logger logger = LoggerFactory.getLogger(RiderResource.class);
 
     @RestClient
@@ -35,26 +35,26 @@ public class RiderResource {
         static native TemplateInstance registerRider(Rider rider, boolean registerOk);
     }
 
-    @GET
+    @Path("/riders")
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance getAllRiders() {
+        logger.info("Getting all riders");
         List<Rider> riders = riderClient.getAllRiders();
         return RiderResource.Templates.allRiders(riders);
     }
 
-    @Path("/update/{id}")
-    @GET
+    @Path("/riders/update")
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance getUpdateRiderForm(@PathParam("id") Integer id) {
+    public TemplateInstance getUpdateRiderForm(@RestPath Integer id) {
         Rider rider = riderClient.getRider(id);
         return RiderResource.Templates.updateRider(rider);
     }
 
-    @Path("/update/{id}")
     @POST
+    @Path("/riders/update")
     @Produces(MediaType.TEXT_HTML)
     public void updateRider(
-        @PathParam("id") Integer id,
+        @RestPath Integer id,
         @RestForm Integer riderId,
         @RestForm String firstName,
         @RestForm String lastName,
@@ -66,14 +66,16 @@ public class RiderResource {
             if (id.equals(riderId)) {
                 logger.info("Updating rider {}", riderId);
 
-                riderClient.getRider(riderId);
-                Rider newRider = new Rider(
-                    riderId,
-                    firstName.trim(),
-                    lastName.trim(),
-                    StringUtils.isEmpty(streetAddress.trim()) ? null : streetAddress.trim()
-                );
-                riderClient.updateRider(riderId, newRider);
+                if (!StringUtils.isEmpty(firstName) && !StringUtils.isEmpty(lastName)) {
+                    riderClient.getRider(riderId);
+                    Rider newRider = new Rider(
+                        riderId,
+                        firstName.trim(),
+                        lastName.trim(),
+                        StringUtils.isEmpty(streetAddress.trim()) ? null : streetAddress.trim()
+                    );
+                    riderClient.updateRider(riderId, newRider);
+                }
 
                 getUpdateRiderForm(id);
             }
@@ -89,15 +91,14 @@ public class RiderResource {
         getAllRiders();
     }
 
-    @Path("/register")
-    @GET
+    @Path("/riders/register")
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance getRegisterRiderForm() {
         return RiderResource.Templates.registerRider(null, true);
     }
 
-    @Path("/register")
     @POST
+    @Path("/riders/register")
     public TemplateInstance registerRider(
         @RestForm String firstName,
         @RestForm String lastName,
