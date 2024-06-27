@@ -59,15 +59,6 @@ public class BikeResource extends Controller {
             String pageHeader,
             boolean kilometers,
             boolean updateOk);
-
-        static native TemplateInstance milesForBike(
-            List<Miles> miles,
-            String pageHeader,
-            String owner,
-            Motorcycle motorcycle,
-            String distanceUnitText,
-            String currentDate
-        );
     }
 
     @Path("")
@@ -231,24 +222,5 @@ public class BikeResource extends Controller {
             String.format("Enter data for %s %s's bike below.", rider.firstName(), rider.lastName()),
             true,
             true);
-    }
-
-    @Path("/miles")
-    @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance getMilesforBike(@RestPath Integer motorcycleId) {
-        logger.info("Get miles for motorcycle {}", motorcycleId);
-        Motorcycle motorcycle = bikeClient.getBike(motorcycleId);
-        Rider rider = riderClient.getRider(motorcycle.riderId());
-
-        List<Miles> allMilesForMotorcycle = milesClient.getAllMilesForMotorcycle(motorcycleId);
-
-        return Templates.milesForBike(
-            allMilesForMotorcycle,
-            "Moi",
-            rider.firstName() + " " + rider.lastName(),
-            motorcycle,
-            motorcycle.distanceUnit() == 0 ? "Miles" : "Kilometers",
-            LocalDate.now().toString()
-        );
     }
 }
