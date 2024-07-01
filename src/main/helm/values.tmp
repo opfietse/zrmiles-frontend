@@ -8,7 +8,7 @@ image:
   repository: monster:5000/net.opfietse/zrmiles-frontend
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: $IMAGE_TAG
+  tag: 38-52d7689
 
 imagePullSecrets: []
 nameOverride: ""
@@ -101,17 +101,11 @@ volumeMounts: []
 #   readOnly: true
 
 env:
-  - name: QUARKUS_HTTP_PROXY_PROXY_ADDRESS_FORWARDING
-    value: true
-  - name: QUARKUS_HTTP_PROXY_ALLOW_X_FORWARDED
-    value: true
-  - name: QUARKUS_HTTP_PROXY_ENABLE_FORWARDED_HOST
-    value: true
-  - name: QUARKUS_HTTP_PROXY_ENABLE_FORWARDED_PREFIX
-    value: true
-  - name: QUARKUS_HTTP_ROOT_PATH
-    value: /zrmiles-new
-
+  - name: SPRING_APPLICATION_JSON
+    value: '{ "spring.profiles.active": "prod"}'
+  - name: TZ
+    value: Europe/Amsterdam
+    
 nodeSelector: {}
 
 tolerations: []
