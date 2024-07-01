@@ -10,6 +10,10 @@ import java.io.IOException;
 public class EchoFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        requestContext.getHeaders().keySet().stream().forEach(h -> System.out.println(h + ": " + requestContext.getHeaders().get(h)));
+        requestContext
+            .getHeaders()
+            .keySet()
+            .stream()
+            .forEach(h -> System.out.println(h + ": " + requestContext.getHeaders().get(h)));
     }
 }
