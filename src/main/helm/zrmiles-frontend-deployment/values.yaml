@@ -73,11 +73,11 @@ resources: {}
 
 livenessProbe:
   httpGet:
-    path: /q/health/live
+    path: /zrmiles-new/q/health/live
     port: 8080
 readinessProbe:
   httpGet:
-    path: /q/health/ready
+    path: /zrmiles-new/q/health/ready
     port: 8080
 
 autoscaling:
