@@ -25,7 +25,7 @@ import java.util.List;
 
 @Path("miles")
 public class MilesResource extends Controller {
-    private static Logger logger = LoggerFactory.getLogger(MilesResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(MilesResource.class);
 
     @RestClient
     MilesClient milesClient;

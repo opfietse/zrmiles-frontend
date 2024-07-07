@@ -8,4 +8,32 @@
         {version}
         <br>
     </div>
+    <div>
+        <br>
+        Current standings (in {distanceUnit}) for the year <SPAN class="yearHighlight">{year}</SPAN><BR><BR>
+
+        <table border="1">
+            <tr>
+                <th>Rider</th>
+                <th>Year total</th>
+                <th>Per bike</th>
+            </tr>
+            {#each stats}
+                <tr>
+                    <td>
+                        <a href="bikes/rider/{it.riderId}">{it.name}</a>
+                    </td>
+                    <td>{it.mileage}</td>
+                    <td>{it.milesPerBike}</td>
+                </tr>
+            {/each}
+        </table>
+        <br>Click on the <b>name</b> to show that rider's bikes.<br>
+        <form name="yearChooser" method="POST">
+            <input type="hidden" name="{inject:csrf.parameterName}" value="{inject:csrf.token}"/>
+
+            Choose another year <input type="text" size="4" maxlength="4" name="year" value="{year}">
+            <input type="submit" name="changeYear" value="Go">
+        </form>
+    </div>
 {/include}

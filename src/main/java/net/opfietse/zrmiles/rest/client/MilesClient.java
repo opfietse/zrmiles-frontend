@@ -7,6 +7,7 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import net.opfietse.zrmiles.model.Miles;
+import net.opfietse.zrmiles.model.StatisticsRecord;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import java.util.List;
@@ -20,6 +21,10 @@ public interface MilesClient {
     @Path("/miles/{milesId}")
     @GET
     Miles getMilesById(@PathParam("milesId") Integer milesId);
+
+    @Path("/miles/year/{year}")
+    @GET
+    List<StatisticsRecord> getMilesForYear(@PathParam("year") Integer milesId);
 
     @Path("/miles")
     @POST
