@@ -102,15 +102,15 @@ volumeMounts: []
 
 env:
   - name: QUARKUS_HTTP_PROXY_PROXY_ADDRESS_FORWARDING
-    value: 'true'
+    value: 'false'
   - name: QUARKUS_HTTP_PROXY_ALLOW_X_FORWARDED
-    value: 'true'
+    value: 'false'
   - name: QUARKUS_HTTP_PROXY_ENABLE_FORWARDED_HOST
-    value: 'true'
+    value: 'false'
   - name: QUARKUS_HTTP_PROXY_ENABLE_FORWARDED_PREFIX
-    value: 'true'
+    value: 'false'
   - name: QUARKUS_HTTP_ROOT_PATH
-    value: /zrmiles-new
+    value: ""
 
 nodeSelector: {}
 
