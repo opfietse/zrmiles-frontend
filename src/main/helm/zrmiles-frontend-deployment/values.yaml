@@ -73,11 +73,11 @@ resources: {}
 
 livenessProbe:
   httpGet:
-    path: /zrmiles-new/q/health/live
+    path: /q/health/live
     port: 8080
 readinessProbe:
   httpGet:
-    path: /zrmiles-new/q/health/ready
+    path: /q/health/ready
     port: 8080
 
 autoscaling:
@@ -109,8 +109,6 @@ env:
     value: 'false'
   - name: QUARKUS_HTTP_PROXY_ENABLE_FORWARDED_PREFIX
     value: 'false'
-  - name: QUARKUS_HTTP_ROOT_PATH
-    value: ""
 
 nodeSelector: {}
 
