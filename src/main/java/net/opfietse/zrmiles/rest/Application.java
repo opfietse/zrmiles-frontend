@@ -102,6 +102,7 @@ public class Application extends Controller {
     private String makeStringFromMileagesList(List<MilesPlusName> milesPlusNames, float conversion) {
         return milesPlusNames
             .stream()
+            .sorted((s1, s2) -> s1.miles() > s2.miles() ? -1 : s1.miles() < s2.miles() ? 1 : 0)
             .map(s -> ((int) (s.miles() * conversion)) + " (" + s.name() + ")")
             .collect(Collectors.joining(", "));
     }
