@@ -8,7 +8,6 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import net.opfietse.zrmiles.model.Miles;
 import net.opfietse.zrmiles.model.Motorcycle;
 import net.opfietse.zrmiles.model.MotorcycleWithRider;
 import net.opfietse.zrmiles.model.Rider;
@@ -22,7 +21,6 @@ import org.jboss.resteasy.reactive.RestPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;

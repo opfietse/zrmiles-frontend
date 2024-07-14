@@ -1,0 +1,63 @@
+{#include base}
+    {#title}ZR_Riders - Mileage database - preferences{/title}
+    <div>
+        <p>
+            Check or change your preferences for this site.<BR>
+            If your browser accepts cookies your chosen values will be stored for 60 days.
+        </p>
+        <p>
+            The distance unit is only used for showing mileage/kilometrage. To enter<BR>
+            data for your bike the odometer settings for that bike are used.<BR>
+            The date format is used for showing and entering dates.
+        </p>
+        <br>
+        <form name="userPreferences" method="POST">
+            <input type="hidden" name="{inject:csrf.parameterName}" value="{inject:csrf.token}"/>
+            <table>
+                <tr>
+                    <td>
+                        Distance unit
+                    </td>
+                    <td>
+                        <select name="distanceUnitSelect">
+                            <option
+                                    {#if currentDistanceUnit == "Miles"} selected {/if}
+                                    value="{currentDistanceUnit}">
+                                Miles
+                            </option>
+                            <option
+                                    {#if currentDistanceUnit == "Kilometers"} selected {/if}
+                                    value="{currentDistanceUnit}">
+                                Kilometers
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Date format
+                    </td>
+                    <td>
+                        <select name="dateFormatSelect">
+                            <option
+                                    {#if currentDateFormat == "mm-dd-yyyy"} selected {/if}
+                                    value="{currentDateFormat}">
+                                mm-dd-yyyy
+                            </option>
+                            <option
+                                    {#if currentDateFormat == "dd-mm-yyyy"} selected {/if}
+                                    value="{currentDistanceUnit}">
+                                dd-mm-yyyy
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" name="changePreferences" value="Change">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+{/include}

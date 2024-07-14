@@ -3,6 +3,7 @@ package net.opfietse.zrmiles.rest;
 import io.quarkiverse.renarde.Controller;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
+import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -59,9 +60,10 @@ public class Application extends Controller {
     @Path("/home")
     public TemplateInstance indexHomePost(
         @FormParam("year") Integer givenYear,
-        @FormParam("changeYear") String changeYear
+        @FormParam("changeYear") String changeYear,
+        @CookieParam("zrmilesPreferences") String zrmilesPreferences
     ) {
-        logger.info("Get home page for year {}", givenYear);
+        logger.info("Get home page for year {} ({})", givenYear, zrmilesPreferences);
 
         int year = givenYear == null ? determineCurrentYear() : givenYear;
         return getHome(year);
