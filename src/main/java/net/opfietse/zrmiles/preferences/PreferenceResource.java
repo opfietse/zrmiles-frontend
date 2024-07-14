@@ -25,6 +25,7 @@ import static net.opfietse.zrmiles.Constants.DATE_FORMAT_AMERICAN;
 import static net.opfietse.zrmiles.Constants.DATE_FORMAT_EUROPEAN;
 import static net.opfietse.zrmiles.Constants.DISTANCE_UNIT_KILOMETERS;
 import static net.opfietse.zrmiles.Constants.DISTANCE_UNIT_MILES;
+import static net.opfietse.zrmiles.Constants.PREFERENCES_COOKIE_NAME;
 
 @Path("preferences")
 public class PreferenceResource extends Controller {
@@ -48,7 +49,7 @@ public class PreferenceResource extends Controller {
     @GET
     @Path("")
     @NoCache
-    public TemplateInstance preferences(@CookieParam("zrmilesPreferences") String zrmilesPreferenceCookeValue) {
+    public TemplateInstance preferences(@CookieParam(PREFERENCES_COOKIE_NAME) String zrmilesPreferenceCookeValue) {
         logger.info("Get preferences: {}", zrmilesPreferenceCookeValue);
 
         return Templates.preference(
@@ -80,7 +81,7 @@ public class PreferenceResource extends Controller {
             .cookie(
                 new NewCookie(
                     new Cookie(
-                        "zrmilesPreferences",
+                        PREFERENCES_COOKIE_NAME,
                         newDistanceUnit + "And" + (DATE_FORMAT_AMERICAN.equals(newDateFormat) ? "American" : "European")
                     ),
                     "comment",
@@ -95,7 +96,7 @@ public class PreferenceResource extends Controller {
     }
 
     private boolean checkInput(String distanceUnitSelect, String dateFormatSelect) {
-        return (!DISTANCE_UNIT_MILES.equals(distanceUnitSelect) && !DISTANCE_UNIT_KILOMETERS.equals(distanceUnitSelect)) ||
-            (!DATE_FORMAT_AMERICAN.equals(dateFormatSelect) && !DATE_FORMAT_EUROPEAN.equals(dateFormatSelect));
+        return (DISTANCE_UNIT_MILES.equals(distanceUnitSelect) || DISTANCE_UNIT_KILOMETERS.equals(distanceUnitSelect)) &&
+            (DATE_FORMAT_AMERICAN.equals(dateFormatSelect) || DATE_FORMAT_EUROPEAN.equals(dateFormatSelect));
     }
 }

@@ -22,9 +22,9 @@ public interface MilesClient {
     @GET
     Miles getMilesById(@PathParam("milesId") Integer milesId);
 
-    @Path("/miles/year/{year}")
+    @Path("/miles/year/{year}/distanceUnit/{distanceUnit}")
     @GET
-    List<StatisticsRecord> getMilesForYear(@PathParam("year") Integer milesId);
+    List<StatisticsRecord> getMilesForYear(@PathParam("year") Integer milesId, @PathParam("distanceUnit") String distanceUnit);
 
     @Path("/miles")
     @POST
@@ -32,7 +32,7 @@ public interface MilesClient {
 
     @Path("/{milesId}")
     @PUT
-    Miles updateMiles(@PathParam("milesId") Integer milesId,  Miles miles);
+    Miles updateMiles(@PathParam("milesId") Integer milesId, Miles miles);
 
     @Path("/{milesId}")
     @DELETE

@@ -20,16 +20,13 @@
                     </td>
                     <td>
                         <select name="distanceUnitSelect">
+                            {#each distanceUnits}
                             <option
-                                    {#if currentDistanceUnit == "Miles"} selected {/if}
-                                    value="{currentDistanceUnit}">
-                                Miles
+                                    {#if currentDistanceUnit == it} selected {/if}
+                                    value="{it}">
+                                {it}
                             </option>
-                            <option
-                                    {#if currentDistanceUnit == "Kilometers"} selected {/if}
-                                    value="{currentDistanceUnit}">
-                                Kilometers
-                            </option>
+                            {/each}
                         </select>
                     </td>
                 </tr>
@@ -39,16 +36,13 @@
                     </td>
                     <td>
                         <select name="dateFormatSelect">
+                            {#each dateFormats}
                             <option
-                                    {#if currentDateFormat == "mm-dd-yyyy"} selected {/if}
-                                    value="{currentDateFormat}">
-                                mm-dd-yyyy
+                                    {#if currentDateFormat == it} selected {/if}
+                                    value="{it}">
+                                {it}
                             </option>
-                            <option
-                                    {#if currentDateFormat == "dd-mm-yyyy"} selected {/if}
-                                    value="{currentDistanceUnit}">
-                                dd-mm-yyyy
-                            </option>
+                            {/each}
                         </select>
                     </td>
                 </tr>

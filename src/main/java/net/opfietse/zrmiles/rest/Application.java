@@ -23,6 +23,10 @@ import java.time.Month;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static net.opfietse.zrmiles.Constants.DISTANCE_UNIT_KILOMETERS;
+import static net.opfietse.zrmiles.Constants.DISTANCE_UNIT_MILES;
+import static net.opfietse.zrmiles.Constants.PREFERENCES_COOKIE_NAME;
+
 public class Application extends Controller {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
@@ -45,15 +49,15 @@ public class Application extends Controller {
     }
 
     @Path("/")
-    public TemplateInstance indexSlash() {
+    public TemplateInstance indexSlash(@CookieParam("zrmilesPreferences") String zrmilesPreferences) {
         int year = determineCurrentYear();
-        return getHome(year);
+        return getHome(year, zrmilesPreferences);
     }
 
     @Path("/home")
-    public TemplateInstance indexHome(@QueryParam("year") Integer givenYear) {
+    public TemplateInstance indexHome(@QueryParam("year") Integer givenYear, @CookieParam("zrmilesPreferences") String zrmilesPreferences) {
         int year = givenYear == null ? determineCurrentYear() : givenYear;
-        return getHome(year);
+        return getHome(year, zrmilesPreferences);
     }
 
     @POST
@@ -61,18 +65,19 @@ public class Application extends Controller {
     public TemplateInstance indexHomePost(
         @FormParam("year") Integer givenYear,
         @FormParam("changeYear") String changeYear,
-        @CookieParam("zrmilesPreferences") String zrmilesPreferences
+        @CookieParam(PREFERENCES_COOKIE_NAME) String zrmilesPreferences
     ) {
         logger.info("Get home page for year {} ({})", givenYear, zrmilesPreferences);
 
         int year = givenYear == null ? determineCurrentYear() : givenYear;
-        return getHome(year);
+        return getHome(year, zrmilesPreferences);
     }
 
-    private TemplateInstance getHome(int year) {
+    private TemplateInstance getHome(int year, String zrmilesPreferences) {
         logger.info("Getting home page");
 
-        List<StatisticsRecord> milesForYear = milesClient.getMilesForYear(year);
+        String preferredDistanceUnit = zrmilesPreferences == null ? DISTANCE_UNIT_MILES : (zrmilesPreferences.contains(DISTANCE_UNIT_MILES) ? DISTANCE_UNIT_MILES : DISTANCE_UNIT_KILOMETERS);
+        List<StatisticsRecord> milesForYear = milesClient.getMilesForYear(year, preferredDistanceUnit);
 
         List<FrontendStatisticsRecord> stats =
             milesForYear
@@ -81,7 +86,7 @@ public class Application extends Controller {
                 .map(s -> new FrontendStatisticsRecord(s.name(), s.riderId(), s.mileage(), makeStringFromMileagesList(s.mileages(), 1.0f)))
                 .toList();
 
-        return Templates.index(version.orElse("Beta"), year, stats, "kilometers");
+        return Templates.index(version.orElse("Beta"), year, stats, preferredDistanceUnit.toLowerCase());
     }
 
     private static int determineCurrentYear() {
