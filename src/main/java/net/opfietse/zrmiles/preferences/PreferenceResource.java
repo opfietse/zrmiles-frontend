@@ -53,8 +53,8 @@ public class PreferenceResource extends Controller {
         logger.info("Get preferences: {}", zrmilesPreferenceCookeValue);
 
         return Templates.preference(
-            zrmilesPreferenceCookeValue != null && zrmilesPreferenceCookeValue.contains("Miles") ? DISTANCE_UNIT_MILES : DISTANCE_UNIT_KILOMETERS,
-            zrmilesPreferenceCookeValue != null && zrmilesPreferenceCookeValue.contains("American") ? DATE_FORMAT_AMERICAN : DATE_FORMAT_EUROPEAN,
+            zrmilesPreferenceCookeValue != null && zrmilesPreferenceCookeValue.contains(DISTANCE_UNIT_KILOMETERS) ? DISTANCE_UNIT_KILOMETERS : DISTANCE_UNIT_MILES,
+            zrmilesPreferenceCookeValue != null && zrmilesPreferenceCookeValue.contains(DATE_FORMAT_EUROPEAN) ? DATE_FORMAT_EUROPEAN : DATE_FORMAT_AMERICAN,
             distanceUnits,
             dateFormats);
     }
