@@ -3,6 +3,7 @@ package net.opfietse.zrmiles.preferences;
 import io.quarkiverse.renarde.Controller;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
+import io.vertx.ext.web.RoutingContext;
 import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
@@ -63,11 +64,14 @@ public class PreferenceResource extends Controller {
     @Path("")
     public Response changePreferences(
         @Context UriInfo uriInfo,
+        @Context RoutingContext routingContext,
         @FormParam("distanceUnitSelect") String distanceUnitSelect,
         @FormParam("dateFormatSelect") String dateFormatSelect,
         @FormParam("changePreferences") String changePreferences
     ) {
         logger.info("Change preferences: {}, {}", distanceUnitSelect, dateFormatSelect);
+        logger.info("URI: {}, {}, {}", uriInfo.getBaseUri(), uriInfo.getAbsolutePath(), uriInfo.getRequestUri());
+        logger.info("Routing: {}, {}", routingContext.request().path(), routingContext.request().absoluteURI());
 
         if (!checkInput(distanceUnitSelect, dateFormatSelect)) {
             return Response.status(Response.Status.BAD_REQUEST).build();

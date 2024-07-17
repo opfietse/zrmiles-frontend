@@ -102,13 +102,13 @@ volumeMounts: []
 
 env:
   - name: QUARKUS_HTTP_PROXY_PROXY_ADDRESS_FORWARDING
-    value: 'false'
+    value: 'true'
   - name: QUARKUS_HTTP_PROXY_ALLOW_X_FORWARDED
-    value: 'false'
+    value: 'true'
   - name: QUARKUS_HTTP_PROXY_ENABLE_FORWARDED_HOST
-    value: 'false'
+    value: 'true'
   - name: QUARKUS_HTTP_PROXY_ENABLE_FORWARDED_PREFIX
-    value: 'false'
+    value: 'true'
 
 nodeSelector: {}
 
