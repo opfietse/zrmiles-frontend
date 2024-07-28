@@ -19,7 +19,6 @@ import org.jboss.resteasy.reactive.NoCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URI;
 import java.util.List;
 
 import static net.opfietse.zrmiles.Constants.DATE_FORMAT_AMERICAN;
@@ -81,7 +80,7 @@ public class PreferenceResource extends Controller {
         String newDateFormat = (DATE_FORMAT_AMERICAN.equals(dateFormatSelect) ? DATE_FORMAT_AMERICAN : DATE_FORMAT_EUROPEAN);
 
         return Response
-            .seeOther(URI.create(uriInfo.getBaseUri() + "preferences"))
+            .seeOther(uriInfo.getAbsolutePath())
             .cookie(
                 new NewCookie(
                     new Cookie(
