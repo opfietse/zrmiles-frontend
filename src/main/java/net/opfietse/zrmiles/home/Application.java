@@ -1,4 +1,4 @@
-package net.opfietse.zrmiles.rest;
+package net.opfietse.zrmiles.home;
 
 import io.quarkiverse.renarde.Controller;
 import io.quarkus.qute.CheckedTemplate;

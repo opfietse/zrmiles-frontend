@@ -1,0 +1,87 @@
+{#include base}
+    {#title}ZR_Riders - Mileage database - Help page{/title}
+    <div>
+        <BR><BR>
+        <B>Browse around</B><BR>
+        'Home':  The home page. This shows the overall standings for the current year.<BR>
+        <BR>
+        'Riders': Lists all riders currently in the database. Click on an id to show<BR>
+        the bikes for that rider.<BR>
+        <BR>
+        'Bikes': Lists all bikes currently in the database. Click on an id to show<BR>
+        the mileage for that bike.<BR>
+        <BR>
+        <A class="helpHeader" name="rider">Entering personal data</A><BR>
+        If you want to participate you have to start with 'Register'.<BR>
+        Enter your first and last name and optionally an email address and<BR>
+        your location, then click 'Add'.<BR>
+        On success there will appear a link to enter your bike's data.<BR>
+        If you think something went wrong but are not sure click 'Riders' to<BR>
+        see if your entry appears.<BR>
+        <BR>
+        <A class="helpHeader" name="bike">Entering bike data</A><BR>
+        After you have registered you can enter your bike(s).<BR>
+        Click 'Riders', click on the id of your entry and fill out the form.<BR>
+        Please note the 'Odometer in' field! This refers to the odometer of<BR>
+        the bike, not the usual unit that your country uses. So if you are in<BR>
+        the USA but ride a bike that counts in kilometers you should choose<BR>
+        'Kilometers' for the 'Odometer in' field.<BR>
+        <BR>
+        <A class="helpHeader" name="miles">Entering mileage data</A><BR>
+        Click 'Bikes' and choose your entry, or choose your name from the home<BR>
+        page. Choose a bike and fill out the form.<BR>
+        <BR>The date defaults to 'today' but you can enter a date in the past as<BR>
+        well so you are able to enter historic data. BTW 'today' is today on the server<BR>
+        and might not correspond to your today depending on the timezone you're in!!<BR>
+        You can use the 'Correction' field to make any adjustments to the mileage.<BR>
+        E.g. if you loaned the bike to someone else, then, when you've got it back, you<BR>
+        can enter the current milage and enter the (negative) number of miles the<BR>
+        other person did on your bike.<BR>
+        <BR>
+        <A class="helpHeader" name="count">How the miles are counted</A><BR>
+        Miles are counted in the month/year of the entry (the date field).<BR>
+        The starting mileage for the calculations is determined by getting<BR>
+        the LAST entry BEFORE the period that the calculations are for.
+        <BR><BR>
+        Example (dateformat = mm-dd-yyyy):<BR>
+        Entries:
+        <TABLE border="1">
+            <TR><TH>Date</TH><TH>Odometer</TH></TR>
+            <TR><TD>01-10-2004</TD><TD>10300</TD></TR>
+            <TR><TD>02-10-2004</TD><TD>10400</TD></TR>
+            <TR><TD>02-19-2004</TD><TD>10500</TD></TR>
+            <TR><TD>03-10-2004</TD><TD>10600</TD></TR>
+            <TR><TD>05-10-2004</TD><TD>10700</TD></TR>
+            <TR><TD>06-10-2004</TD><TD>10800</TD></TR>
+        </TABLE>
+        <BR>
+        On the homepage it will show <SPAN class="standOut">500</SPAN> miles for the whole year <SPAN class="standOut">2004</SPAN>. This is<BR>
+        calculated as 10800-10300.<BR>
+        For <SPAN class="standOut">January</SPAN> it will show <SPAN class="standOut">0</SPAN> miles. There is an entry in January but there<BR>
+        is no entry <SPAN class="standOut">BEFORE</SPAN> that so there is no calculation to be done. The program<BR>
+        will <SPAN class="standOut">NOT</SPAN> 'assume' that if there is no suitable entry it should start with 0.<BR>
+        For <SPAN class="standOut">February</SPAN> it will report <SPAN class="standOut">200</SPAN> miles (10500-10300). It does take 10300 as the<BR>
+        startmileage because it is the last record before February.<BR>
+        For <SPAN class="standOut">March</SPAN> it will report <SPAN class="standOut">100</SPAN> miles (10600-10500).<BR>
+        For <SPAN class="standOut">April</SPAN> it will report <SPAN class="standOut">0</SPAN> miles. There is no record in April therefor the program<BR>
+        concludes that the bike has not been ridden in April.<BR>
+        For <SPAN class="standOut">May</SPAN> it will report <SPAN class="standOut">100</SPAN> miles (10700-10600).<BR>
+        For <SPAN class="standOut">June</SPAN> it will report <SPAN class="standOut">100</SPAN> miles (10800-10700).<BR>
+        <BR>
+        Basically, what this boiles down to is that you should at least enter the odometer reading<BR>
+        of the LAST ride of the month (for each bike you have) to get your monthly/yearly totals <BR>
+        right. More entries will not harm the totals and will give you more accurate 'current' standings.<BR>
+        <BR>
+        <A class="helpHeader" name="preferences">Change preferences</A><BR>
+        You can change the distance unit (kilometers or miles) that is used in<BR>
+        the reports (e.g. opening page) (NOT for entering) by<BR>
+        going to the 'Preferences' page and choose your settings.<BR>
+        For displaying AND entering dates you can choose between European or<BR>
+        American format.<BR>
+        These settings are stored in a 'Cookie' for 60 days. So if you return<BR>
+        to this site within 60 days your settings are remembered and will be<BR>
+        stored for another 60 days. It goes without saying that this only works if<BR>
+        your browser accepts Cookies.<BR>
+        The settings default to 'American' settings (miles and mm-dd-yyyy).<BR>
+    </div>
+{/include}

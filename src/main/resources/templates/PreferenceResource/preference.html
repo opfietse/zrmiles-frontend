@@ -21,11 +21,11 @@
                     <td>
                         <select name="distanceUnitSelect">
                             {#each distanceUnits}
-                            <option
-                                    {#if currentDistanceUnit == it} selected {/if}
-                                    value="{it}">
-                                {it}
-                            </option>
+                                <option
+                                        {#if currentDistanceUnit == it} selected {/if}
+                                        value="{it}">
+                                    {it}
+                                </option>
                             {/each}
                         </select>
                     </td>
@@ -37,11 +37,11 @@
                     <td>
                         <select name="dateFormatSelect">
                             {#each dateFormats}
-                            <option
-                                    {#if currentDateFormat == it} selected {/if}
-                                    value="{it}">
-                                {it}
-                            </option>
+                                <option
+                                        {#if currentDateFormat == it} selected {/if}
+                                        value="{it}">
+                                    {it}
+                                </option>
                             {/each}
                         </select>
                     </td>
