@@ -24,7 +24,7 @@ public class DateResource extends Controller {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         return Templates.date(
-            formatter.format(now),
+            formatter.format(now.withZoneSameInstant(ZoneId.of("Europe/Amsterdam"))),
             formatter.format(now.withZoneSameInstant(ZoneId.of("Europe/London"))),
             formatter.format(now.withZoneSameInstant(ZoneId.of("UTC")))
         );
