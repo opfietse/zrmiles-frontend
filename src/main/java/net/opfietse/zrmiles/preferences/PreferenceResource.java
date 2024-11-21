@@ -14,7 +14,7 @@ import jakarta.ws.rs.core.Cookie;
 import jakarta.ws.rs.core.NewCookie;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
-import net.opfietse.zrmiles.Constants;
+import net.opfietse.zrmiles.CookieStuff;
 import org.jboss.resteasy.reactive.NoCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +23,7 @@ import java.util.List;
 
 import static net.opfietse.zrmiles.Constants.DATE_FORMAT_AMERICAN;
 import static net.opfietse.zrmiles.Constants.DATE_FORMAT_EUROPEAN;
+import static net.opfietse.zrmiles.Constants.DATE_PREFERENCE_EUROPEAN;
 import static net.opfietse.zrmiles.Constants.DISTANCE_UNIT_KILOMETERS;
 import static net.opfietse.zrmiles.Constants.DISTANCE_UNIT_MILES;
 import static net.opfietse.zrmiles.Constants.PREFERENCES_COOKIE_NAME;
@@ -31,8 +32,8 @@ import static net.opfietse.zrmiles.Constants.PREFERENCES_COOKIE_NAME;
 public class PreferenceResource extends Controller {
     private static final Logger logger = LoggerFactory.getLogger(PreferenceResource.class);
 
-    private static final List<String> distanceUnits = List.of(DISTANCE_UNIT_MILES, Constants.DISTANCE_UNIT_KILOMETERS);
-    private static final List<String> dateFormats = List.of(DATE_FORMAT_AMERICAN, Constants.DATE_FORMAT_EUROPEAN);
+    private static final List<String> distanceUnits = List.of(DISTANCE_UNIT_MILES, DISTANCE_UNIT_KILOMETERS);
+    private static final List<String> dateFormats = List.of(DATE_FORMAT_AMERICAN, DATE_FORMAT_EUROPEAN);
     private static final Logger log = LoggerFactory.getLogger(PreferenceResource.class);
 
     @CheckedTemplate
@@ -54,7 +55,7 @@ public class PreferenceResource extends Controller {
 
         return Templates.preference(
             zrmilesPreferenceCookeValue != null && zrmilesPreferenceCookeValue.contains(DISTANCE_UNIT_KILOMETERS) ? DISTANCE_UNIT_KILOMETERS : DISTANCE_UNIT_MILES,
-            zrmilesPreferenceCookeValue != null && zrmilesPreferenceCookeValue.contains(DATE_FORMAT_EUROPEAN) ? DATE_FORMAT_EUROPEAN : DATE_FORMAT_AMERICAN,
+            CookieStuff.preferenceIsEuropeanDate(zrmilesPreferenceCookeValue) ? DATE_FORMAT_EUROPEAN : DATE_FORMAT_AMERICAN,
             distanceUnits,
             dateFormats);
     }

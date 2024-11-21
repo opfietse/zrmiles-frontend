@@ -30,11 +30,11 @@ public interface MilesClient {
     @POST
     Miles addMiles(Miles miles);
 
-    @Path("/{milesId}")
+    @Path("/miles/{milesId}")
     @PUT
     Miles updateMiles(@PathParam("milesId") Integer milesId, Miles miles);
 
-    @Path("/{milesId}")
+    @Path("/miles/{milesId}")
     @DELETE
     Miles deleteMiles(@PathParam("milesId") Integer milesId);
 }

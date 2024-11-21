@@ -5,15 +5,16 @@
         {!{pageHeader}!}
         {!<br><br>!}
 
-        <br><br>Change mileage details for <%= owner %> <%= (motorcycle.getMake() + " " + motorcycle.getModel()) %>
+        <br><br>Change mileage details for {owner}'s {motorcycle.make} {motorcycle.model}
         <br><br>
         <form name="milesForm" method="POST">
             <input type="hidden" name="milesId" value="{milesId}">
+            <input type="hidden" name="motorcycleId" value="{miles.motorcycleId}">
             <input type="hidden" name="{inject:csrf.parameterName}" value="{inject:csrf.token}"/>
             <table border="0">
                 <tr>
                     <td>Date ({dateFormat}) *</td>
-                    <td><input type="text" size="10" maxlength="10" name="date" value="{miles.milesDate}"></td>
+                    <td><input type="text" size="10" maxlength="10" name="date" value="{miles.milesDateString}"></td>
                 </tr><tr>
                     <td>Odometer reading *</td>
                     <td><input type="text" size="6" maxlength="6" name="odometer" value="{miles.odometerReading}"></td>

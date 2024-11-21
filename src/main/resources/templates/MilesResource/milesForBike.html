@@ -14,7 +14,7 @@
             <input type="hidden" name="motorcycleId" value="{motorcycle.id}">
             <table border="0">
                 <tr>
-                    <td>Date (TODO: date format) *</td>
+                    <td>Date ({datePreference}) *</td>
 
                     <td><input type="text" size="10" maxlength="10" name="date" value="{currentDate}"></td>
                 </tr>
@@ -28,7 +28,7 @@
                 </tr>
                 <tr>
                     <td>Free comment</td>
-                    <td><input type="text" size="50" maxlength="50" name="userComment" value="TODO: fill"></td>
+                    <td><input type="text" size="50" maxlength="50" name="userComment"></td>
                 </tr>
                 <tr>
                     <td colspan="2" align="center"><input type="submit" name="addMiles" value="Add"></td>
@@ -47,7 +47,7 @@
             {#each miles}
                 <tr>
                     <td>
-                        {it.milesDate}
+                        {it.milesDateString}
                     </td>
                     <td><a href="../update/{it.id}">
                             {it.odometerReading}</a>

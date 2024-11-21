@@ -9,6 +9,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
+import net.opfietse.zrmiles.CookieStuff;
 import net.opfietse.zrmiles.model.FrontendStatisticsRecord;
 import net.opfietse.zrmiles.model.MilesPlusName;
 import net.opfietse.zrmiles.model.StatisticsRecord;
@@ -23,8 +24,6 @@ import java.time.Month;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static net.opfietse.zrmiles.Constants.DISTANCE_UNIT_KILOMETERS;
-import static net.opfietse.zrmiles.Constants.DISTANCE_UNIT_MILES;
 import static net.opfietse.zrmiles.Constants.PREFERENCES_COOKIE_NAME;
 
 public class Application extends Controller {
@@ -76,7 +75,7 @@ public class Application extends Controller {
     private TemplateInstance getHome(int year, String zrmilesPreferences) {
         logger.info("Getting home page");
 
-        String preferredDistanceUnit = zrmilesPreferences == null ? DISTANCE_UNIT_MILES : (zrmilesPreferences.contains(DISTANCE_UNIT_MILES) ? DISTANCE_UNIT_MILES : DISTANCE_UNIT_KILOMETERS);
+        String preferredDistanceUnit = CookieStuff.getOdometerPreference(zrmilesPreferences);
         List<StatisticsRecord> milesForYear = milesClient.getMilesForYear(year, preferredDistanceUnit);
 
         List<FrontendStatisticsRecord> stats =

@@ -6,6 +6,7 @@ public record Miles(
     Integer id,
     Integer motorcycleId,
     LocalDate milesDate,
+    String milesDateString,
     Integer odometerReading,
     Integer correctionMiles,
     String userComment

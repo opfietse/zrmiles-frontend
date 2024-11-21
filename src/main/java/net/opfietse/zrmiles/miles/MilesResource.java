@@ -4,10 +4,13 @@ import io.quarkiverse.renarde.Controller;
 import io.quarkiverse.renarde.util.StringUtils;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
+import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import net.opfietse.zrmiles.CookieStuff;
+import net.opfietse.zrmiles.DateExtension;
 import net.opfietse.zrmiles.model.Miles;
 import net.opfietse.zrmiles.model.Motorcycle;
 import net.opfietse.zrmiles.model.Rider;
@@ -22,6 +25,11 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
+
+import static net.opfietse.zrmiles.Constants.DATE_FORMAT_AMERICAN;
+import static net.opfietse.zrmiles.Constants.DATE_FORMAT_EUROPEAN;
+import static net.opfietse.zrmiles.Constants.PREFERENCES_COOKIE_NAME;
 
 @Path("miles")
 public class MilesResource extends Controller {
@@ -45,10 +53,13 @@ public class MilesResource extends Controller {
             String owner,
             Motorcycle motorcycle,
             String distanceUnitText,
+            String datePreference,
             String currentDate
         );
 
         static native TemplateInstance updateMiles(
+            String owner,
+            Motorcycle motorcycle,
             Miles miles,
             Integer milesId,
             String dateFormat
@@ -57,20 +68,38 @@ public class MilesResource extends Controller {
 
     @Path("/bike")
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance getMilesForMotorcycle(@RestPath Integer motorcycleId) {
+    public TemplateInstance getMilesForMotorcycle(
+        @CookieParam(PREFERENCES_COOKIE_NAME) String zrmilesPreferenceCookeValue,
+        @RestPath Integer motorcycleId
+    ) {
         logger.info("Get miles for motorcycle {}", motorcycleId);
         Motorcycle motorcycle = bikeClient.getBike(motorcycleId);
         Rider rider = riderClient.getRider(motorcycle.riderId());
 
         List<Miles> allMilesForMotorcycle = milesClient.getAllMilesForMotorcycle(motorcycleId).reversed();
 
+        Stream<Miles> milesStream = allMilesForMotorcycle
+            .stream()
+            .map(
+                m -> new Miles(
+                    m.id(),
+                    m.motorcycleId(),
+                    m.milesDate(),
+                    DateExtension.formatLocalDate(m.milesDate(), zrmilesPreferenceCookeValue),
+                    m.odometerReading(),
+                    m.correctionMiles(),
+                    m.userComment()
+                )
+            );
+
         return Templates.milesForBike(
-            allMilesForMotorcycle,
+            milesStream.toList(),
             "Moi",
             rider.firstName() + " " + rider.lastName(),
             motorcycle,
             motorcycle.distanceUnit() == 0 ? "Miles" : "Kilometers",
-            LocalDate.now().toString()
+            CookieStuff.preferenceIsAmericanDate(zrmilesPreferenceCookeValue) ? DATE_FORMAT_AMERICAN : DATE_FORMAT_EUROPEAN,
+            DateExtension.formatLocalDate(LocalDate.now(), CookieStuff.getDatePreference(zrmilesPreferenceCookeValue))
         );
     }
 
@@ -78,6 +107,7 @@ public class MilesResource extends Controller {
     @Path("bike")
     @Produces(MediaType.TEXT_HTML)
     public void addMiles(
+        @CookieParam(PREFERENCES_COOKIE_NAME) String zrmilesPreferenceCookeValue,
         @RestPath Integer id,
         @RestForm Integer motorcycleId,
         @RestForm String date,
@@ -98,7 +128,8 @@ public class MilesResource extends Controller {
                 Miles newMiles = new Miles(
                     null,
                     motorcycleId,
-                    LocalDate.parse(date),
+                    CookieStuff.preferenceIsAmericanDate(zrmilesPreferenceCookeValue) ? DateExtension.AMERICAN_DATE_FORMAT.parse(date, LocalDate::from) : DateExtension.EUROPEAN_DATE_FORMAT.parse(date, LocalDate::from),
+                    null,
                     odometer,
                     StringUtils.isEmpty(correction.trim()) ? null : Integer.parseInt(correction.trim()),
                     StringUtils.isEmpty(userComment.trim()) ? null : userComment.trim()
@@ -107,20 +138,43 @@ public class MilesResource extends Controller {
             }
         }
 
-        getMilesForMotorcycle(id);
+        getMilesForMotorcycle(zrmilesPreferenceCookeValue, id);
     }
 
     @Path("update/{milesId}")
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance getMiles(@RestPath Integer milesId) {
+    public TemplateInstance getMiles(
+        @CookieParam(PREFERENCES_COOKIE_NAME) String zrmilesPreferenceCookeValue,
+        @RestPath Integer milesId
+    ) {
         Miles miles = milesClient.getMilesById(milesId);
-        return Templates.updateMiles(miles, milesId, "TODO: mm-dd-yyyy");
+        miles = new Miles(
+            miles.id(),
+            miles.motorcycleId(),
+            miles.milesDate(),
+            DateExtension.formatLocalDate(miles.milesDate(), zrmilesPreferenceCookeValue),
+            miles.odometerReading(),
+            miles.correctionMiles(),
+            miles.userComment()
+        );
+
+        Motorcycle motorcycle = bikeClient.getBike(miles.motorcycleId());
+        Rider rider = riderClient.getRider(motorcycle.riderId());
+
+        return Templates.updateMiles(
+            rider.firstName() + " " + rider.lastName(),
+            motorcycle,
+            miles,
+            milesId,
+            CookieStuff.getDatePreferenceFormat(zrmilesPreferenceCookeValue)
+        );
     }
 
     @POST
     @Path("update/{pathMilesId}")
     @Produces(MediaType.TEXT_HTML)
     public void updateMiles(
+        @CookieParam(PREFERENCES_COOKIE_NAME) String zrmilesPreferenceCookeValue,
         @RestPath Integer pathMilesId,
         @RestForm Integer milesId,
         @RestForm Integer motorcycleId,
@@ -139,7 +193,8 @@ public class MilesResource extends Controller {
                     new Miles(
                         milesId,
                         motorcycleId,
-                        LocalDate.parse(date),
+                        CookieStuff.preferenceIsAmericanDate(zrmilesPreferenceCookeValue) ? DateExtension.AMERICAN_DATE_FORMAT.parse(date, LocalDate::from) : DateExtension.EUROPEAN_DATE_FORMAT.parse(date, LocalDate::from),
+                        null,
                         odometer,
                         StringUtils.isEmpty(correction.trim()) ? null : Integer.parseInt(correction.trim()),
                         StringUtils.isEmpty(userComment.trim()) ? null : userComment.trim())
@@ -151,6 +206,7 @@ public class MilesResource extends Controller {
             }
         }
 
-        getMilesForMotorcycle(motorcycleId);
+        logger.info("Call miles page {}, {}", zrmilesPreferenceCookeValue, motorcycleId);
+        getMilesForMotorcycle(zrmilesPreferenceCookeValue, motorcycleId);
     }
 }
