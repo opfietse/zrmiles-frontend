@@ -9,6 +9,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import net.opfietse.zrmiles.CookieStuff;
 import net.opfietse.zrmiles.DateExtension;
 import net.opfietse.zrmiles.model.Miles;
@@ -49,7 +50,6 @@ public class MilesResource extends Controller {
 
         static native TemplateInstance milesForBike(
             List<Miles> miles,
-            String pageHeader,
             String owner,
             Motorcycle motorcycle,
             String distanceUnitText,
@@ -94,7 +94,6 @@ public class MilesResource extends Controller {
 
         return Templates.milesForBike(
             milesStream.toList(),
-            "Moi",
             rider.firstName() + " " + rider.lastName(),
             motorcycle,
             motorcycle.distanceUnit() == 0 ? "Miles" : "Kilometers",
@@ -106,7 +105,7 @@ public class MilesResource extends Controller {
     @POST
     @Path("bike")
     @Produces(MediaType.TEXT_HTML)
-    public void addMiles(
+    public Response addMiles(
         @CookieParam(PREFERENCES_COOKIE_NAME) String zrmilesPreferenceCookeValue,
         @RestPath Integer id,
         @RestForm Integer motorcycleId,
@@ -120,7 +119,13 @@ public class MilesResource extends Controller {
             if (id.equals(motorcycleId)) {
                 logger.info("Updating motorcycle {}, adding miles", motorcycleId);
                 if (StringUtils.isEmpty(date) || odometer.equals(0)) {
-                    return; // TODO: supply the right values
+                    // TODO: show error
+                    return Response
+                        .seeOther(uriInfo.getAbsolutePath())
+                        .header("Cache-Control", "no-cache, no-store, must-revalidate")
+                        .header("Pragma", "no-cache")
+                        .header("Expires", "0")
+                        .build();
                 }
 
                 bikeClient.getBike(motorcycleId);
@@ -138,7 +143,12 @@ public class MilesResource extends Controller {
             }
         }
 
-        getMilesForMotorcycle(zrmilesPreferenceCookeValue, id);
+        return Response
+            .seeOther(uriInfo.getAbsolutePath())
+            .header("Cache-Control", "no-cache, no-store, must-revalidate")
+            .header("Pragma", "no-cache")
+            .header("Expires", "0")
+            .build();
     }
 
     @Path("update/{milesId}")

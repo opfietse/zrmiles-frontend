@@ -23,7 +23,6 @@ import java.util.List;
 
 import static net.opfietse.zrmiles.Constants.DATE_FORMAT_AMERICAN;
 import static net.opfietse.zrmiles.Constants.DATE_FORMAT_EUROPEAN;
-import static net.opfietse.zrmiles.Constants.DATE_PREFERENCE_EUROPEAN;
 import static net.opfietse.zrmiles.Constants.DISTANCE_UNIT_KILOMETERS;
 import static net.opfietse.zrmiles.Constants.DISTANCE_UNIT_MILES;
 import static net.opfietse.zrmiles.Constants.PREFERENCES_COOKIE_NAME;
@@ -88,7 +87,7 @@ public class PreferenceResource extends Controller {
                         PREFERENCES_COOKIE_NAME,
                         newDistanceUnit + "And" + (DATE_FORMAT_AMERICAN.equals(newDateFormat) ? "American" : "European")
                     ),
-                    "comment",
+                    "Zrmiles preferences cookie",
                     365 * 24 * 60 * 60,
                     true
                 )
