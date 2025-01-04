@@ -52,10 +52,10 @@ do
   sleep 5
   COUNTER=$(expr $COUNTER + 1)
 
-  if curl http://monster:5000/v2/net.opfietse/zrmiles-frontend/tags/list|jq .|grep $IMAGE_TAG
+  if curl http://skorpion:5000/v2/net.opfietse/zrmiles-frontend/tags/list|jq .|grep $IMAGE_TAG
   then
     COUNTER=40
   fi
 done
 
-curl http://monster:5000/v2/net.opfietse/zrmiles-frontend/tags/list|jq .|grep $IMAGE_TAG
+curl http://skorpion:5000/v2/net.opfietse/zrmiles-frontend/tags/list|jq .|grep $IMAGE_TAG

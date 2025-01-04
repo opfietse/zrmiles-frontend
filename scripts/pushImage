@@ -1,6 +1,6 @@
 . $(dirname $0)/settings
 
-#tag = "monster:5000/opfietse.net/${applicationName}"
+#tag = "skorpion:5000/opfietse.net/${applicationName}"
 #baseName = 'locationupdate'
 
 #echo X${NUMBER_OF_COMMITS} X${LAST_HASH} X${IMAGE_BASE_NAME} X${IMAGE_APPLICATION_NAME}

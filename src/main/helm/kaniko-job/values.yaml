@@ -114,5 +114,5 @@ tolerations: []
 affinity: {}
 
 app:
-  image_name: monster:5000/net.opfietse/zrmiles-frontend
+  image_name: skorpion:5000/net.opfietse/zrmiles-frontend
   image_tag: $IMAGE_TAG

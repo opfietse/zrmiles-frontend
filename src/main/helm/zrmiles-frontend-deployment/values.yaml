@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: monster:5000/net.opfietse/zrmiles-frontend
+  repository: skorpion:5000/net.opfietse/zrmiles-frontend
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: $IMAGE_TAG
