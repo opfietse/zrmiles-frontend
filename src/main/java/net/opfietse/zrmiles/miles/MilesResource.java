@@ -118,7 +118,7 @@ public class MilesResource extends Controller {
         if ("Add".equals(addMiles)) {
             if (id.equals(motorcycleId)) {
                 logger.info("Updating motorcycle {}, adding miles", motorcycleId);
-                if (StringUtils.isEmpty(date) || odometer.equals(0)) {
+                if (StringUtils.isEmpty(date) || odometer == null || odometer < 0) {
                     // TODO: show error
                     return Response
                         .seeOther(uriInfo.getAbsolutePath())
