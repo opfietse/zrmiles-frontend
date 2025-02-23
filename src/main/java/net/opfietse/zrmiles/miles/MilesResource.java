@@ -217,6 +217,16 @@ public class MilesResource extends Controller {
         }
 
         logger.info("Call miles page {}, {}", zrmilesPreferenceCookeValue, motorcycleId);
-        getMilesForMotorcycle(zrmilesPreferenceCookeValue, motorcycleId);
+
+        redirect(MilesResource.class).getMilesForMotorcycle(zrmilesPreferenceCookeValue, motorcycleId);
+//        return Response
+//            .seeOther(uriInfo.getAbsolutePath())
+//            .header("Cache-Control", "no-cache, no-store, must-revalidate")
+//            .header("Pragma", "no-cache")
+//            .header("Expires", "0")
+//            .build();
+
+
+//        getMilesForMotorcycle(zrmilesPreferenceCookeValue, motorcycleId);
     }
 }
