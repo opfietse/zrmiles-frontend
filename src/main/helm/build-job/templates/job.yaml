@@ -51,7 +51,7 @@ spec:
           command:
             - /bin/sh
             - -c
-            - "cd /src/zrmiles-frontend && mvn -Duser.home=/var/maven clean package -Dmaven.test.skip=true"
+            - "cd /src/zrmiles-frontend && mvn -Duser.home=/var/maven -Dmaven.test.skip=true -Dquarkus.http.root-path=/zrmiles clean package"
           {{- with .Values.env }}
           env:
             {{- toYaml . | nindent 10 }}

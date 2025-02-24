@@ -17,7 +17,7 @@
                 <caption><em>Bike</em></caption>
                 <tr>
                     <td>
-                        Make *
+                    {#ifError 'make'}<span style="color: red">{/ifError}Make *{#ifError 'make'}</span>{/ifError}
                     </td>
                     <td>
                         <input type="text" size="40" maxlength="40" name="make"
@@ -26,7 +26,7 @@
                 </tr>
                 <tr>
                     <td>
-                        Model *
+                    {#ifError 'model'}<span style="color: red">{/ifError}Model *{#ifError 'model'}</span>{/ifError}
                     </td>
                     <td>
                         <input type="text" size="50" maxlength="50" name="model"
@@ -35,7 +35,7 @@
                 </tr>
                 <tr>
                     <td>
-                        Year
+                    {#ifError 'year'}<span style="color: red">{/ifError}Year{#ifError 'year'}</span>{/ifError}
                     </td>
                     <td>
                         <input type="text" size="4" maxlength="4" name="year"

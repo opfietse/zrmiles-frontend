@@ -4,6 +4,8 @@ import io.quarkiverse.renarde.Controller;
 import io.quarkiverse.renarde.util.StringUtils;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -118,17 +120,29 @@ public class BikeResource extends Controller {
     @Path("/update")
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance updateBike(
-        @RestPath Integer id,
-        @RestForm Integer bikeId,
-        @RestForm Integer riderId,
-        @RestForm String make,
-        @RestForm String model,
+        @RestPath @Positive Integer id,
+        @RestForm @Positive Integer bikeId,
+        @RestForm @Positive Integer riderId,
+        @RestForm @NotBlank String make,
+        @RestForm @NotBlank String model,
         @RestForm String year,
         @RestForm String distanceUnit,
         @RestForm String updateMotorcycle,
         @RestForm String deleteMotorcycle
     ) {
         logger.info("Update/delete bike {}", id);
+
+        if (StringUtils.isEmpty(make)) {
+            validation.addError("make", "Must enter a make value");
+        }
+
+        if (StringUtils.isEmpty(model)) {
+            validation.addError("model", "Must enter a model value");
+        }
+
+        if (validationFailed()) {
+            getUpdateBikeForm(bikeId);
+        }
 
         if ("Update".equals(updateMotorcycle)) {
             if (id.equals(bikeId)) {
@@ -175,6 +189,37 @@ public class BikeResource extends Controller {
         @RestForm String distanceUnit,
         @RestForm String addMotorcycle
     ) {
+
+        if (StringUtils.isEmpty(make)) {
+            validation.addError("make", "Must enter a make value");
+        }
+
+        if (StringUtils.isEmpty(model)) {
+            validation.addError("model", "Must enter a model value");
+        }
+
+        if (!StringUtils.isEmpty(year)) {
+            try {
+                Integer.parseInt(year);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                validation.addError("year", "Must enter a valid year");
+            }
+        }
+
+        if (validationFailed()) {
+           Motorcycle newBike = new Motorcycle(null, 0, make, model, 0, Short.valueOf(distanceUnit), 0);
+            List<Motorcycle> bikes = riderBikeClient.getForRider(riderId);
+            Rider rider = riderClient.getRider(riderId);
+            return Templates.bikesForRider(newBike,
+                bikes,
+                String.format("Enter data for %s %s's bike below.", rider.firstName(), rider.lastName()),
+                false,
+                true
+            );
+
+        }
+
         if ("Add".equals(addMotorcycle)) {
             logger.info("Add bike for rider {}: {} {} {} {}", riderId, make, model, year, distanceUnit);
 

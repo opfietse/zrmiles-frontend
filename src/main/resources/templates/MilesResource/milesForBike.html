@@ -12,12 +12,16 @@
             <input type="hidden" name="motorcycleId" value="{motorcycle.id}">
             <table border="0">
                 <tr>
-                    <td>Date ({datePreference}) *</td>
+                    <td>
+                    {#ifError 'date'}<span style="color: red">{/ifError}Date ({datePreference}) *{#ifError 'date'}</span>{/ifError}
+                    </td>
 
                     <td><input type="text" size="10" maxlength="10" name="date" value="{currentDate}"></td>
                 </tr>
                 <tr>
-                    <td>Odometer reading *</td>
+                    <td>
+                    {#ifError 'odometer'}<span style="color: red">{/ifError}Odometer reading *{#ifError 'odometer'}</span>{/ifError}
+                    </td>
                     <td><input type="text" size="6" maxlength="6" name="odometer"></td>
                 </tr>
                 <tr>

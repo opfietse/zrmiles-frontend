@@ -4,6 +4,8 @@ import io.quarkiverse.renarde.Controller;
 import io.quarkiverse.renarde.util.StringUtils;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -54,14 +56,26 @@ public class RiderResource extends Controller {
     @Path("/riders/update")
     @Produces(MediaType.TEXT_HTML)
     public void updateRider(
-        @RestPath Integer id,
-        @RestForm Integer riderId,
-        @RestForm String firstName,
-        @RestForm String lastName,
+        @RestPath @Positive Integer id,
+        @RestForm @Positive Integer riderId,
+        @RestForm @NotBlank String firstName,
+        @RestForm @NotBlank String lastName,
         @RestForm String streetAddress,
         @RestForm String updateRider,
         @RestForm String deleteRider
     ) {
+        if (StringUtils.isEmpty(firstName)) {
+            validation.addError("firstName", "Please give a valid first name");
+        }
+
+        if (StringUtils.isEmpty(lastName)) {
+            validation.addError("lastName", "Please give a valid last name");
+        }
+
+        if (validationFailed()) {
+            getUpdateRiderForm(riderId);
+        }
+
         if ("Update".equals(updateRider)) {
             if (id.equals(riderId)) {
                 logger.info("Updating rider {}", riderId);
