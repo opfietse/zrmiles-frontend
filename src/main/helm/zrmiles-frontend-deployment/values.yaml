@@ -109,6 +109,11 @@ env:
     value: 'true'
   - name: QUARKUS_HTTP_PROXY_ENABLE_FORWARDED_PREFIX
     value: 'true'
+  - name: QUARKUS_OIDC_CREDENTIALS_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: zrmiles-secret
+        key: oidc-client-secret
 
 nodeSelector: {}
 

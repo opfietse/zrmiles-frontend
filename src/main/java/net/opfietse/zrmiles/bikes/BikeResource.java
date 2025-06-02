@@ -4,6 +4,8 @@ import io.quarkiverse.renarde.Controller;
 import io.quarkiverse.renarde.util.StringUtils;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
+import io.quarkus.security.identity.SecurityIdentity;
+import jakarta.inject.Inject;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.ws.rs.POST;
@@ -28,6 +30,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Path("bikes")
+//@Authenticated
+//@OidcClientFilter
 public class BikeResource extends Controller {
     private static final Logger logger = LoggerFactory.getLogger(BikeResource.class);
 
@@ -39,6 +43,9 @@ public class BikeResource extends Controller {
     private RiderBikeClient riderBikeClient;
     @RestClient
     private MilesClient milesClient;
+
+    @Inject
+    SecurityIdentity securityIdentity;
 
     @CheckedTemplate
     static class Templates {
@@ -62,9 +69,11 @@ public class BikeResource extends Controller {
     }
 
     @Path("")
+//    @RolesAllowed("user")
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance getAllBikes() {
         logger.info("getAllBikes called");
+        logger.info("securityIdentity is anonymous: {}", securityIdentity.isAnonymous());
 
         List<Motorcycle> bikes = bikeClient.getAllBikes();
         List<Rider> riders = riderClient.getAllRiders();
@@ -208,7 +217,7 @@ public class BikeResource extends Controller {
         }
 
         if (validationFailed()) {
-           Motorcycle newBike = new Motorcycle(null, 0, make, model, 0, Short.valueOf(distanceUnit), 0);
+            Motorcycle newBike = new Motorcycle(null, 0, make, model, 0, Short.valueOf(distanceUnit), 0);
             List<Motorcycle> bikes = riderBikeClient.getForRider(riderId);
             Rider rider = riderClient.getRider(riderId);
             return Templates.bikesForRider(newBike,
